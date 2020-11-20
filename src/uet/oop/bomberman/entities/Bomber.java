@@ -6,10 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
+import java.util.Random;
+
 public class Bomber extends Entity {
 
     public Bomber(int x, int y, Image img) {
-        super( x, y, img);
+        super(x, y, img);
     }
 
     @Override
