@@ -25,7 +25,7 @@ public class BombermanGame extends Application {
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
     static String path = System.getProperty("user.dir") + "/res/levels/";
-
+    static Entity background = new Grass(0, 0, Sprite.grass.getFxImage());
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -50,7 +50,6 @@ public class BombermanGame extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                render();
                 update();
             }
         };
@@ -121,15 +120,16 @@ public class BombermanGame extends Application {
                 }
             }
         }
+        stillObjects.forEach(g -> g.render(gc));
     }
 
     public void update() {
-        entities.forEach(Entity::update);
-    }
-
-    public void render() {
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        stillObjects.forEach(g -> g.render(gc));
-        entities.forEach(g -> g.render(gc));
+        for (Entity en : entities) {
+            background.setX(en.getX());
+            background.setY(en.getY());
+            background.render(gc);
+            en.update();
+            en.render(gc);
+        }
     }
 }
