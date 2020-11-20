@@ -3,6 +3,7 @@ package uet.oop.bomberman.entities;
 import javafx.scene.image.Image;
 
 public class Enemy extends Entity {
+    private int left;
     public Enemy(int x, int y, Image img) {
         super( x, y, img);
     }

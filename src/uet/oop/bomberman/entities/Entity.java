@@ -22,7 +22,7 @@ public abstract class Entity {
         this.x = x * Sprite.SCALED_SIZE;
         this.y = y * Sprite.SCALED_SIZE;
         this.img = img;
-        this.dir = 0;
+        this.dir = 1;
         this.curState = 0;
         constImage = new ArrayList<>();
     }

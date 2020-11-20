@@ -25,8 +25,8 @@ public class Balloon extends Enemy {
         constImage.get(3).add(Sprite.balloom_left3.getFxImage());
     }
     static Random ran = new Random();
-    static int[] xx = {0, 0, -4, 4};
-    static int[] yy = {-4, 4, 0, 0};
+    static int[] xx = {0, 4, 0, -4};
+    static int[] yy = {-4, 0, 4, 0};
     @Override
     public void update() {
         int nextDir = ran.nextInt() % 4;
@@ -36,11 +36,11 @@ public class Balloon extends Enemy {
         curState += 1;
         curState %= 3;
         if (nextDir == 1) {
-            this.img = constImage.get(nextDir).get(curState);
-        } else {
-            if (nextDir == 3) {
-                this.img = constImage.get(nextDir).get(curState);
-            }
+            this.dir = 1;
         }
+        if (nextDir == 3) {
+            this.dir = 3;
+        }
+        this.img = constImage.get(this.dir).get(this.curState);
     }
 }
