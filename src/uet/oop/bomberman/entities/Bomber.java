@@ -1,10 +1,13 @@
 package uet.oop.bomberman.entities;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -12,7 +15,7 @@ import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.BombermanGame;
 
 public class Bomber extends Entity {
-    private double speed = 0.2;
+    private int speed = 1;
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
@@ -45,6 +48,27 @@ public class Bomber extends Entity {
         this.addState(left);
     }
 
+    public boolean canMove(int aX, int aY) {
+        double newX = x + aX * speed;
+        double newY = y + aY * speed;
+        Rectangle2D rect = new Rectangle2D(newX, newY, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        for (Wall wall : BombermanGame.stillObjects) {
+            if (rect.intersects(wall.getX(), wall.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                return false;
+            }
+        }
+        for (Entity X : BombermanGame.entities) {
+            if (X instanceof Brick == false) {
+                continue;
+            }
+            if (rect.intersects(X.getX(), X.getY(), Sprite.SCALED_SIZE,Sprite.SCALED_SIZE)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     @Override
     public void update() {
         if (BombermanGame.bomberDirection == -1) {
@@ -66,8 +90,10 @@ public class Bomber extends Entity {
             case (3):
                 --aX;
         }
-        this.addX(aX * speed);
-        this.addY(aY * speed);
+        if (canMove(aX, aY) == true) {
+            this.addX(aX * speed);
+            this.addY(aY * speed);
+        }
         if (BombermanGame.bomberDirection == dir) {
             curState = (curState + 1) % 3;
             setImg();

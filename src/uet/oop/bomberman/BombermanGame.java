@@ -27,11 +27,12 @@ public class BombermanGame extends Application {
     
     private GraphicsContext gc;
     private Canvas canvas;
-    public List<Entity> entities = new ArrayList<>();
-    public List<Entity> stillObjects = new ArrayList<>();
+    public static List<Entity> entities = new ArrayList<>(); // contains brick, item, enemy
+    public static List<Wall> stillObjects = new ArrayList<>();
     static String path = System.getProperty("user.dir") + "/res/levels/";
     static Entity background = new Grass(0, 0, Sprite.grass.getFxImage());
     public static int bomberDirection = -1;
+    public static Bomber player;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -73,12 +74,18 @@ public class BombermanGame extends Application {
         // Them scene vao stage
         stage.setScene(scene);
         stage.show();
-
+        Thread thr = new Thread();
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
                 update();
+                playerUpdate();
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         };
         timer.start();
@@ -102,15 +109,14 @@ public class BombermanGame extends Application {
                 Entity object;
                 char c = S.charAt(j);
                 if(Character.compare(c, '#') == 0) {
-                    object = new Wall(j, i, Sprite.wall.getFxImage());
-                    stillObjects.add(object);
+                    stillObjects.add(new Wall(j, i, Sprite.wall.getFxImage()));
                 } else {
-                    stillObjects.add(new Grass(j, i, Sprite.grass.getFxImage()));
+                    Grass newGrass = new Grass(j, i, Sprite.grass.getFxImage());
+                    newGrass.render(gc);
 
                     switch (c) {
                         case ('p'):
-                            object = new Bomber(j, i, Sprite.player_right.getFxImage());
-                            entities.add(object);
+                            player = new Bomber(j, i, Sprite.player_right.getFxImage());
                             break;
                         case ('1'):
                             object = new Balloon(j, i, Sprite.balloom_left1.getFxImage());
@@ -159,5 +165,13 @@ public class BombermanGame extends Application {
             en.update();
             en.render(gc);
         }
+    }
+
+    public void playerUpdate() {
+        background.setX(player.getX());
+        background.setY(player.getY());
+        background.render(gc);
+        player.update();
+        player.render(gc);
     }
 }
