@@ -7,12 +7,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import uet.oop.bomberman.graphics.Sprite;
 
-import javax.xml.stream.XMLInputFactory;
 import java.util.ArrayList;
 
 public abstract class Entity {
-    protected int x;
-    protected int y;
+    protected double x;
+    protected double y;
     protected Image img;
     ArrayList <ArrayList<Image> > constImage;
     protected int dir;
@@ -26,30 +25,34 @@ public abstract class Entity {
         this.curState = 0;
         constImage = new ArrayList<>();
     }
-    public void addX(int val) {
+    public void addX(double val) {
         this.x += val;
         if (this.x > 1024) this.x = 1024;
         if (this.x < 32) this.x = 32;
     }
-    public void addY(int val) {
+    public void addY(double val) {
         this.y += val;
         if (this.y > 1024) this.y = 1024;
         if (this.y < 32) this.y = 32;
     }
 
-    public void setX(int x) {
+    public void setImg() {
+        img = constImage.get(dir).get(curState);
+    }
+
+    public void setX(double x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
@@ -58,13 +61,7 @@ public abstract class Entity {
     }
 
     public void render(GraphicsContext gc) {
-        SnapshotParameters params = new SnapshotParameters();
-        params.setFill(Color.TRANSPARENT);
-
-        ImageView iv = new ImageView(img);
-        Image base = iv.snapshot(params, null);
-
-        gc.drawImage(base, x, y);
+        gc.drawImage(img, x, y);
     }
     public abstract void update();
 }

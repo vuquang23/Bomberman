@@ -1,19 +1,24 @@
 package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 
+import javafx.scene.input.KeyEvent;
 import java.io.*;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 
 public class BombermanGame extends Application {
     
@@ -22,10 +27,12 @@ public class BombermanGame extends Application {
     
     private GraphicsContext gc;
     private Canvas canvas;
-    private List<Entity> entities = new ArrayList<>();
-    private List<Entity> stillObjects = new ArrayList<>();
+    public List<Entity> entities = new ArrayList<>();
+    public List<Entity> stillObjects = new ArrayList<>();
     static String path = System.getProperty("user.dir") + "/res/levels/";
     static Entity background = new Grass(0, 0, Sprite.grass.getFxImage());
+    public static int bomberDirection = -1;
+
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -43,9 +50,30 @@ public class BombermanGame extends Application {
         // Tao scene
         Scene scene = new Scene(root);
 
+        // Control
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+            if (key.getCode() == KeyCode.UP) {
+                bomberDirection = 0;
+            }
+            if (key.getCode() == KeyCode.RIGHT) {
+                bomberDirection = 1;
+            }
+            if (key.getCode() == KeyCode.DOWN) {
+                bomberDirection = 2;
+            }
+            if (key.getCode() == KeyCode.LEFT) {
+                bomberDirection = 3;
+            }
+        });
+
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, key -> {
+            bomberDirection = -1;
+        });
+
         // Them scene vao stage
         stage.setScene(scene);
         stage.show();
+
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
