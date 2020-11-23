@@ -57,10 +57,7 @@ public class Bomber extends Entity {
                 return false;
             }
         }
-        for (Entity X : BombermanGame.entities) {
-            if (X instanceof Brick == false) {
-                continue;
-            }
+        for (Brick X : BombermanGame.bricks) {
             if (rect.intersects(X.getX(), X.getY(), Sprite.SCALED_SIZE,Sprite.SCALED_SIZE)) {
                 return false;
             }

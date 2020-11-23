@@ -27,7 +27,9 @@ public class BombermanGame extends Application {
     
     private GraphicsContext gc;
     private Canvas canvas;
-    public static List<Entity> entities = new ArrayList<>(); // contains brick, item, enemy
+    public static List<Brick> bricks = new ArrayList<>();
+    public static List<Enemy> enemies = new ArrayList<>();
+    public static List<Item> items = new ArrayList<>();
     public static List<Wall> stillObjects = new ArrayList<>();
     static String path = System.getProperty("user.dir") + "/res/levels/";
     static Entity background = new Grass(0, 0, Sprite.grass.getFxImage());
@@ -77,14 +79,20 @@ public class BombermanGame extends Application {
         Thread thr = new Thread();
 
         AnimationTimer timer = new AnimationTimer() {
+            long timeChange = 0, last = 0;
             @Override
             public void handle(long l) {
                 update();
-                try {
-                    Thread.sleep(5);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if(last == 0) {
+                    last = l;
+                    render();
+                    return;
                 }
+                if (l - last > 1000000000 / 100) {
+                    render();
+                    last = l;
+                }
+
             }
         };
         timer.start();
@@ -118,36 +126,29 @@ public class BombermanGame extends Application {
                             player = new Bomber(j, i, Sprite.player_right.getFxImage());
                             break;
                         case ('1'):
-                            object = new Balloon(j, i, Sprite.balloom_left1.getFxImage());
-                            entities.add(object);
+                            enemies.add(new Balloon(j, i, Sprite.balloom_left1.getFxImage()));
                             break;
                         case ('2'):
-                            object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
-                            entities.add(object);
+                            enemies.add(new Oneal(j, i, Sprite.oneal_left1.getFxImage()));
                             break;
                         case ('*'):
-                            object = new Brick(j, i, Sprite.brick.getFxImage());
-                            entities.add(object);
+                            bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
                             break;
                         case ('x'):
-                            object = new Item(j, i, Sprite.portal.getFxImage(), 4);
-                            entities.add(object);
-                            entities.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                            items.add(new Item(j, i, Sprite.portal.getFxImage(), 4));
+                            bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
                             break;
                         case('s'):
-                            object = new Item(j, i, Sprite.powerup_speed.getFxImage(), 3);
-                            entities.add(object);
-                            entities.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                            items.add(new Item(j, i, Sprite.powerup_speed.getFxImage(), 3));
+                            bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
                             break;
                         case ('f'):
-                            object = new Item(j, i, Sprite.powerup_flames.getFxImage(), 2);
-                            entities.add(object);
-                            entities.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                            items.add(new Item(j, i, Sprite.powerup_flames.getFxImage(), 2));
+                            bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
                             break;
                         case ('b'):
-                            object = new Item(j, i, Sprite.powerup_bombs.getFxImage(), 1);
-                            entities.add(object);
-                            entities.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                            items.add(new Item(j, i, Sprite.powerup_bombs.getFxImage(), 1));
+                            bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
                             break;
                     }
                 }
@@ -156,20 +157,34 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
     }
 
-    public void update() {
-        for (Entity en : entities) {
-            background.setX(en.getX());
-            background.setY(en.getY());
+    public void update() { /// update bom -> flame -> brick -> enemy -> player
+        for (Brick e : bricks) {
+            background.setX(e.getX());
+            background.setY(e.getY());
             background.render(gc);
+            e.update();
         }
+
+        for (Enemy e : enemies) {
+            background.setX(e.getX());
+            background.setY(e.getY());
+            background.render(gc);
+            e.update();
+        }
+
         background.setX(player.getX());
         background.setY(player.getY());
         background.render(gc);
-        for (Entity en : entities) {
-            en.update();
-            en.render(gc);
-        }
         player.update();
+    }
+
+    public void render() {
+        for(Brick e : bricks) {
+            e.render(gc);
+        }
+        for(Enemy e : enemies) {
+            e.render(gc);
+        }
         player.render(gc);
     }
 }

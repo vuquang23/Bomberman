@@ -11,7 +11,7 @@ public class Enemy extends Entity {
     protected static int[] yy = {-1, 0, 1, 0};
     public Enemy(int x, int y, Image img) {
         super(x, y, img);
-        this.speed = 4;
+        this.speed = 1;
     }
     public boolean canMove(int x, int y) {
          javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
@@ -20,10 +20,7 @@ public class Enemy extends Entity {
                 return false;
             }
         }
-        for (Entity a : BombermanGame.entities) {
-            if (a instanceof Brick == false) {
-                continue;
-            }
+        for (Brick a : BombermanGame.bricks) {
             if (rect.intersects(a.getX(), a.getY(), Sprite.SCALED_SIZE,Sprite.SCALED_SIZE)) {
                 return false;
             }
