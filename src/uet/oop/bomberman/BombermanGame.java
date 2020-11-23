@@ -80,7 +80,6 @@ public class BombermanGame extends Application {
             @Override
             public void handle(long l) {
                 update();
-                playerUpdate();
                 try {
                     Thread.sleep(5);
                 } catch (InterruptedException e) {
@@ -163,16 +162,13 @@ public class BombermanGame extends Application {
             background.setY(en.getY());
             background.render(gc);
         }
+        background.setX(player.getX());
+        background.setY(player.getY());
+        background.render(gc);
         for (Entity en : entities) {
             en.update();
             en.render(gc);
         }
-    }
-
-    public void playerUpdate() {
-        background.setX(player.getX());
-        background.setY(player.getY());
-        background.render(gc);
         player.update();
         player.render(gc);
     }
