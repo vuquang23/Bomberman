@@ -25,22 +25,28 @@ public class Balloon extends Enemy {
         constImage.get(3).add(Sprite.balloom_left3.getFxImage());
     }
     static Random ran = new Random();
-    static int[] xx = {0, 4, 0, -4};
-    static int[] yy = {-4, 0, 4, 0};
     @Override
     public void update() {
-        int nextDir = ran.nextInt() % 4;
-        if (nextDir < 0) nextDir += 4;
-        this.addX(xx[nextDir]);
-        this.addY(yy[nextDir]);
-        curState += 1;
-        curState %= 3;
-        if (nextDir == 1) {
-            this.dir = 1;
+        while (true) {
+            int nextDir = ran.nextInt() % 4;
+            if (nextDir < 0) nextDir += 4;
+            int newX = this.x + xx[nextDir] * this.speed;
+            int newY = this.y + yy[nextDir] * this.speed;
+            if (canMove(newX, newY) == false) {
+                continue;
+            }
+            this.setX(newX);
+            this.setY(newY);
+            curState += 1;
+            curState %= 3;
+            if (nextDir == 1) {
+                this.dir = 1;
+            }
+            if (nextDir == 3) {
+                this.dir = 3;
+            }
+            this.img = constImage.get(this.dir).get(this.curState);
+            break;
         }
-        if (nextDir == 3) {
-            this.dir = 3;
-        }
-        this.img = constImage.get(this.dir).get(this.curState);
     }
 }

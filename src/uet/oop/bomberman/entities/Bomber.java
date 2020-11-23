@@ -64,6 +64,7 @@ public class Bomber extends Entity {
             if (rect.intersects(X.getX(), X.getY(), Sprite.SCALED_SIZE,Sprite.SCALED_SIZE)) {
                 return false;
             }
+
         }
 
         return true;

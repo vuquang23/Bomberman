@@ -1,13 +1,35 @@
 package uet.oop.bomberman.entities;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.graphics.Sprite;
 
 public class Enemy extends Entity {
-    private int left;
+    protected int speed;
+    protected static int[] xx = {0, 1, 0, -1};
+    protected static int[] yy = {-1, 0, 1, 0};
     public Enemy(int x, int y, Image img) {
-        super( x, y, img);
+        super(x, y, img);
+        this.speed = 4;
     }
-
+    public boolean canMove(int x, int y) {
+         javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        for (Wall wall : BombermanGame.stillObjects) {
+            if (rect.intersects(wall.getX(), wall.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                return false;
+            }
+        }
+        for (Entity a : BombermanGame.entities) {
+            if (a instanceof Brick == false) {
+                continue;
+            }
+            if (rect.intersects(a.getX(), a.getY(), Sprite.SCALED_SIZE,Sprite.SCALED_SIZE)) {
+                return false;
+            }
+        }
+        return true;
+    }
     @Override
     public void update() {
 

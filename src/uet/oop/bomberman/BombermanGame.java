@@ -162,6 +162,8 @@ public class BombermanGame extends Application {
             background.setX(en.getX());
             background.setY(en.getY());
             background.render(gc);
+        }
+        for (Entity en : entities) {
             en.update();
             en.render(gc);
         }
