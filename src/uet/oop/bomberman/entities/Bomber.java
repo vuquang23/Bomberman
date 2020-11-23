@@ -15,7 +15,7 @@ import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.BombermanGame;
 
 public class Bomber extends Entity {
-    private int speed = 1;
+    private int speed = 4;
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);

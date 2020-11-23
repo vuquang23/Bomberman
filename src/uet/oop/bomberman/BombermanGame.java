@@ -155,6 +155,7 @@ public class BombermanGame extends Application {
             }
         }
         stillObjects.forEach(g -> g.render(gc));
+
     }
 
     public void update() { /// update bom -> flame -> brick -> enemy -> player
