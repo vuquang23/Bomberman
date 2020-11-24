@@ -31,6 +31,7 @@ public class BombermanGame extends Application {
     public static List<Enemy> enemies = new ArrayList<>();
     public static List<Item> items = new ArrayList<>();
     public static List<Wall> stillObjects = new ArrayList<>();
+
     static String path = System.getProperty("user.dir") + "/res/levels/";
     static Entity background = new Grass(0, 0, Sprite.grass.getFxImage());
     public static int bomberDirection = -1;
@@ -133,7 +134,7 @@ public class BombermanGame extends Application {
                             enemies.add(new Balloon(j, i, Sprite.balloom_left1.getFxImage()));
                             break;
                         case ('2'):
-                            //enemies.add(new Oneal(j, i, Sprite.oneal_left1.getFxImage()));
+                            enemies.add(new Oneal(j, i, Sprite.oneal_left1.getFxImage()));
                             break;
                         case ('*'):
                             bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
