@@ -37,10 +37,43 @@ public class Bomb extends Entity {
                     continue;
                 }
                 if (i == len) {
-                    BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 2));
+                    BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 1));
                 }
                 else {
                     BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 2));
+                }
+                x = this.x + i * Sprite.SCALED_SIZE;
+                y = this.y;
+                if (canMove(x, y) == false) {
+                    continue;
+                }
+                if (i == len) {
+                    BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 3));
+                }
+                else {
+                    BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 2));
+                }
+                x = this.x;
+                y = this.y - i * Sprite.SCALED_SIZE;
+                if (canMove(x, y) == false) {
+                    continue;
+                }
+                if (i == len) {
+                    BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 4));
+                }
+                else {
+                    BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 5));
+                }
+                x = this.x;
+                y = this.y + i * Sprite.SCALED_SIZE;
+                if (canMove(x, y) == false) {
+                    continue;
+                }
+                if (i == len) {
+                    BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 6));
+                }
+                else {
+                    BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 5));
                 }
             }
 
