@@ -36,6 +36,10 @@ public abstract class Entity {
         this.y += val;
     }
 
+    public int getCurState() {
+        return curState;
+    }
+
     public void setImg(int _dir, int _curState) {
         img = constImage.get(_dir).get(_curState);
     }

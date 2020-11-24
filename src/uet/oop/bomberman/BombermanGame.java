@@ -31,7 +31,8 @@ public class BombermanGame extends Application {
     public static List<Enemy> enemies = new ArrayList<>();
     public static List<Item> items = new ArrayList<>();
     public static List<Wall> stillObjects = new ArrayList<>();
-
+    public static List<Flame> flames = new ArrayList<>();
+    public static List<Bomb> bombs = new ArrayList<>();
     static String path = System.getProperty("user.dir") + "/res/levels/";
     static Entity background = new Grass(0, 0, Sprite.grass.getFxImage());
     public static int bomberDirection = -1;
@@ -80,7 +81,7 @@ public class BombermanGame extends Application {
         Thread thr = new Thread();
 
         AnimationTimer timer = new AnimationTimer() {
-            long last = 0;
+            long timeChange = 0, last = 0;
             @Override
             public void handle(long l) {
                 update();
@@ -89,7 +90,7 @@ public class BombermanGame extends Application {
                     render();
                     return;
                 }
-                if (l - last > 1000000000 / 150) {
+                if (l - last > 1000000000 / 100) {
                     render();
                     last = l;
                 }
@@ -160,9 +161,36 @@ public class BombermanGame extends Application {
             }
         }
         stillObjects.forEach(g -> g.render(gc));
+
     }
 
     public void update() { /// update bom -> flame -> brick -> enemy -> player
+        for (int i = 0; i < bombs.size(); ++i) {
+            Bomb b = bombs.get(i);
+            background.setX(b.getX());
+            background.setY(b.getY());
+            background.render(gc);
+            if (1 < 2) {
+                b.update();
+                if (b.getCurState() == -1) {
+                    bombs.remove(i);
+                    --i;
+                }
+            }
+        }
+        for (int i = 0; i < flames.size(); ++i) {
+            Flame f = flames.get(i);
+            background.setX(f.getX());
+            background.setY(f.getY());
+            background.render(gc);
+            if (1 < 2) {
+                f.update();
+                if (f.getCurState() == -1) {
+                    flames.remove(i);
+                    --i;
+                }
+            }
+        }
         for (Brick e : bricks) {
             background.setX(e.getX());
             background.setY(e.getY());

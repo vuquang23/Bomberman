@@ -5,12 +5,17 @@ import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Enemy;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class Oneal extends Enemy {
+    final private int maxSpeed = 2;
+    static Random ran = new Random();
+    List <Integer> randomDir = new ArrayList<Integer>();
     public Oneal(int x, int y, Image img) {
         super(x, y, img);
+        for (int i = 0; i < 4; ++i) {
+            randomDir.add(i);
+        }
         constImage.add(new ArrayList<>());
         constImage.add(new ArrayList<>());
         constImage.get(1).add(Sprite.oneal_right1.getFxImage());
@@ -54,7 +59,7 @@ public class Oneal extends Enemy {
         }
         return d;
     }
-    static Random ran = new Random();
+
     @Override
     public void update() {
         int[][] d = minDis();
@@ -65,9 +70,11 @@ public class Oneal extends Enemy {
             int curDis = 100000000;
             int newX = this.x;
             int newY = this.y;
-            this.speed = ran.nextInt() % 4 + 1;
-            if (this.speed <= 0) this.speed += 4;
-            for (int i = 0; i < 4; ++i) {
+            this.speed = ran.nextInt() % maxSpeed + 1;
+            if (this.speed <= 0) this.speed += maxSpeed;
+            Collections.shuffle(randomDir);
+            for (int id = 0; id < 4; ++id) {
+                int i = randomDir.get(id).intValue();
                 int tempX = this.x + this.speed * xx[i];
                 int tempY = this.y + this.speed * yy[i];
                 if (tempX < 0 || tempY < 0 || tempX >= n || tempY >= m) {
