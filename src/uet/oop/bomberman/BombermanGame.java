@@ -1,7 +1,6 @@
 package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -14,7 +13,6 @@ import uet.oop.bomberman.graphics.Sprite;
 
 import javafx.scene.input.KeyEvent;
 import java.io.*;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -37,6 +35,7 @@ public class BombermanGame extends Application {
     static Entity background = new Grass(0, 0, Sprite.grass.getFxImage());
     public static int bomberDirection = -1;
     public static Bomber player;
+    public static boolean dropBomb = false;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -69,10 +68,17 @@ public class BombermanGame extends Application {
             if (key.getCode() == KeyCode.LEFT) {
                 bomberDirection = 3;
             }
+            if (key.getCode() == KeyCode.SPACE) {
+                dropBomb = true; // drop bom
+            }
         });
 
         scene.addEventFilter(KeyEvent.KEY_RELEASED, key -> {
-            bomberDirection = -1;
+            if (key.getCode() != KeyCode.SPACE) {
+                bomberDirection = -1;
+            } else {
+                dropBomb = false;
+            }
         });
 
         // Them scene vao stage
@@ -97,7 +103,6 @@ public class BombermanGame extends Application {
                 try {
                     Thread.sleep(10);
                 } catch (Exception e) {
-
                 }
             }
         };

@@ -7,6 +7,7 @@ import uet.oop.bomberman.BombermanGame;
 
 public class Bomber extends Entity {
     private int speed = 4;
+    private int bombLimit = 1;
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
@@ -115,8 +116,19 @@ public class Bomber extends Entity {
         int newX = x + dirX(curDir) * speed;
         int newY = y + dirY(curDir) * speed;
         boolean meetBlock = false;
-
         Rectangle2D rect = new Rectangle2D(newX, newY, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+//      bomb
+        for(Bomb bomb : BombermanGame.bombs) {
+            if (rect.intersects(bomb.getX(), bomb.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE) == false) {
+                continue;
+            }
+            if (meetBlock == false) {
+                meetBlock = true;
+            }
+            aX += moveX(curDir, bomb);
+            aY += moveY(curDir, bomb);
+        }
+//      wall
         for (Wall wall : BombermanGame.stillObjects) {
             if (rect.intersects(wall.getX(), wall.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE) == false) {
                 continue;
@@ -127,6 +139,7 @@ public class Bomber extends Entity {
             aX += moveX(curDir, wall);
             aY += moveY(curDir, wall);
         }
+//      brick
         for (Brick brick : BombermanGame.bricks) {
             if (rect.intersects(brick.getX(), brick.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE) == false) {
                 continue;
@@ -137,6 +150,7 @@ public class Bomber extends Entity {
             aX += moveX(curDir, brick);
             aY += moveY(curDir, brick);
         }
+
         if (meetBlock == false) { /// take bonus later
             x = newX;
             y = newY;
@@ -161,8 +175,18 @@ public class Bomber extends Entity {
 //        }
     }
 
+    void dropBomb() {
+        if (BombermanGame.bombs.size() == bombLimit) return;
+        Bomb newBomb = new Bomb((x/32)*32, (y/32)*32, Sprite.bomb.getFxImage());
+        BombermanGame.bombs.add(newBomb);
+    }
+
     @Override
     public void update() {
+        if (BombermanGame.dropBomb == true) {
+            dropBomb();
+        }
+
         if (BombermanGame.bomberDirection == -1) {
             curState = 0;
             setImg(dir, curState);
