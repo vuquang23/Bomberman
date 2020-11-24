@@ -65,8 +65,8 @@ public class Oneal extends Enemy {
             int curDis = 100000000;
             int newX = this.x;
             int newY = this.y;
-            this.speed = ran.nextInt() % 16 + 1;
-            if (this.speed <= 0) this.speed += 16;
+            this.speed = ran.nextInt() % 6 + 1;
+            if (this.speed <= 0) this.speed += 6;
             for (int i = 0; i < 4; ++i) {
                 int tempX = this.x + this.speed * xx[i];
                 int tempY = this.y + this.speed * yy[i];
@@ -81,10 +81,14 @@ public class Oneal extends Enemy {
                 }
             }
             if (curDis == 100000000) {
-                nextDir = ran.nextInt() % 4;
-                if (nextDir < 0) nextDir += 4;
-                newX = this.x + xx[nextDir] * this.speed;
-                newY = this.y + yy[nextDir] * this.speed;
+                if (this.x % 32 == 0 && this.y % 32 == 0) {
+                    this.dir = ran.nextInt() % 4;
+                    if (this.dir < 0) {
+                        this.dir += 4;
+                    }
+                }
+                newX = this.x + xx[this.dir] * this.speed;
+                newY = this.y + yy[this.dir] * this.speed;
             }
             if (canMove(newX, newY) == false) {
                 continue;
@@ -93,13 +97,13 @@ public class Oneal extends Enemy {
             this.setY(newY);
             curState += 1;
             curState %= 3;
-            if (nextDir == 1) {
-                this.dir = 1;
+            if (this.dir == 1) {
+                this.imgDir = 1;
             }
-            if (nextDir == 3) {
-                this.dir = 3;
+            if (this.dir == 3) {
+                this.imgDir = 3;
             }
-            this.img = constImage.get(this.dir).get(this.curState);
+            this.img = constImage.get(this.imgDir).get(this.curState);
             break;
         }
     }
