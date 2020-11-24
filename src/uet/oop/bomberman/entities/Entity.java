@@ -16,7 +16,7 @@ public abstract class Entity {
     protected int x;
     protected int y;
     protected Image img;
-    ArrayList <ArrayList<Image> > constImage;
+
     protected int dir;
     protected int curState;
     protected Image background = Sprite.grass.getFxImage();
@@ -27,7 +27,7 @@ public abstract class Entity {
         this.img = img;
         this.dir = 1;
         this.curState = 0;
-        constImage = new ArrayList<>();
+
     }
     public void addX(int val) {
         this.x += val;
@@ -40,8 +40,8 @@ public abstract class Entity {
         return curState;
     }
 
-    public void setImg(int _dir, int _curState) {
-        img = constImage.get(_dir).get(_curState);
+    public void setImg(Image newImg) {
+        img = newImg;
     }
 
     public void setX(int x) {
@@ -58,10 +58,6 @@ public abstract class Entity {
 
     public int getY() {
         return y;
-    }
-
-    public void addState(ArrayList <Image> state) {
-        constImage.add(state);
     }
 
     public void render(GraphicsContext gc) {

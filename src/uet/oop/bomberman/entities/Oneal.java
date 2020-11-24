@@ -11,11 +11,9 @@ public class Oneal extends Enemy {
     final private int maxSpeed = 2;
     static Random ran = new Random();
     List <Integer> randomDir = new ArrayList<Integer>();
-    public Oneal(int x, int y, Image img) {
-        super(x, y, img);
-        for (int i = 0; i < 4; ++i) {
-            randomDir.add(i);
-        }
+    public static ArrayList <ArrayList<Image> > constImage = new ArrayList<>();
+
+    public static void load() {
         constImage.add(new ArrayList<>());
         constImage.add(new ArrayList<>());
         constImage.get(1).add(Sprite.oneal_right1.getFxImage());
@@ -26,6 +24,13 @@ public class Oneal extends Enemy {
         constImage.get(3).add(Sprite.oneal_left1.getFxImage());
         constImage.get(3).add(Sprite.oneal_left2.getFxImage());
         constImage.get(3).add(Sprite.oneal_left3.getFxImage());
+    }
+
+    public Oneal(int x, int y, Image img) {
+        super(x, y, img);
+        for (int i = 0; i < 4; ++i) {
+            randomDir.add(i);
+        }
     }
     public int[][] minDis() {
         int n = Sprite.SCALED_SIZE * BombermanGame.WIDTH;

@@ -38,7 +38,16 @@ public class BombermanGame extends Application {
     public static boolean dropBomb = false;
 
     public static void main(String[] args) {
+        loadAll();
         Application.launch(BombermanGame.class);
+    }
+
+    static void loadAll() {
+        Balloon.load();
+        Bomb.load();
+        Bomber.load();
+        Flame.load();
+        Oneal.load();
     }
 
     @Override
@@ -100,10 +109,11 @@ public class BombermanGame extends Application {
                     render();
                     last = l;
                 }
-                try {
-                    Thread.sleep(10);
-                } catch (Exception e) {
-                }
+
+//                try {
+//                    Thread.sleep(10);
+//                } catch (Exception e) {
+//                }
             }
         };
         timer.start();

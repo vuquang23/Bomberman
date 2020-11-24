@@ -10,14 +10,19 @@ import java.util.ArrayList;
 public class Bomb extends Entity {
     public static int len;
     private int sta[] = {0, 1, 2, 1, 0};
-    public Bomb(int x, int y, Image img) {
-        super(x, y, img);
-        this.len = 1;
-        this.curState = -1;
+    public static ArrayList <ArrayList<Image> > constImage = new ArrayList<>();
+
+    public static void load() {
         constImage.add(new ArrayList<Image>());
         constImage.get(0).add(Sprite.bomb.getFxImage());
         constImage.get(0).add(Sprite.bomb_1.getFxImage());
         constImage.get(0).add(Sprite.bomb_2.getFxImage());
+    }
+
+    public Bomb(int x, int y, Image img) {
+        super(x, y, img);
+        this.len = 1;
+        this.curState = -1;
     }
     private boolean canMove(int x, int y) {
         return false;

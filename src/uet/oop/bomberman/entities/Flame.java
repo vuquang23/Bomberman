@@ -9,10 +9,9 @@ import java.util.ArrayList;
 public class Flame extends Entity {
     private int type;
     private int sta[] = {0, 1, 2, 1, 0};
-    public Flame(int x, int y, Image img, int type) {
-        super(x, y, img);
-        this.type = type;
-        this.curState = -1;
+    public static ArrayList <ArrayList<Image> > constImage = new ArrayList<>();
+
+    public static void load() {
         // center
         constImage.add(new ArrayList<Image>());
         constImage.get(0).add(Sprite.bomb_exploded.getFxImage());
@@ -48,6 +47,13 @@ public class Flame extends Entity {
         constImage.get(6).add(Sprite.explosion_horizontal_right_last.getFxImage());
         constImage.get(6).add(Sprite.explosion_horizontal_right_last1.getFxImage());
         constImage.get(6).add(Sprite.explosion_horizontal_right_last2.getFxImage());
+    }
+
+    public Flame(int x, int y, Image img, int type) {
+        super(x, y, img);
+        this.type = type;
+        this.curState = -1;
+
     }
     @Override
     public void update() {

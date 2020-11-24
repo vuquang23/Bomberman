@@ -8,36 +8,40 @@ import uet.oop.bomberman.BombermanGame;
 public class Bomber extends Entity {
     private int speed = 4;
     private int bombLimit = 1;
+    public static ArrayList <ArrayList<Image> > constImage = new ArrayList<>();
 
-    public Bomber(int x, int y, Image img) {
-        super(x, y, img);
+    public static void load() {
         // 0: up
         ArrayList<Image> up = new ArrayList<>();
         up.add(Sprite.player_up.getFxImage());
         up.add(Sprite.player_up_1.getFxImage());
         up.add(Sprite.player_up_2.getFxImage());
-        this.addState(up);
+        constImage.add(up);
 
         // 1: right
         ArrayList<Image> right = new ArrayList<>();
         right.add(Sprite.player_right.getFxImage());
         right.add(Sprite.player_right_1.getFxImage());
         right.add(Sprite.player_right_2.getFxImage());
-        this.addState(right);
+        constImage.add(right);
 
         // 2: down
         ArrayList<Image> down = new ArrayList<>();
         down.add(Sprite.player_down.getFxImage());
         down.add(Sprite.player_down_1.getFxImage());
         down.add(Sprite.player_down_2.getFxImage());
-        this.addState(down);
+        constImage.add(down);
 
         // 3: left:
         ArrayList<Image> left = new ArrayList<>();
         left.add(Sprite.player_left.getFxImage());
         left.add(Sprite.player_left_1.getFxImage());
         left.add(Sprite.player_left_2.getFxImage());
-        this.addState(left);
+        constImage.add(left);
+    }
+
+    public Bomber(int x, int y, Image img) {
+        super(x, y, img);
     }
 
     int dirX(int dir) {
@@ -189,17 +193,17 @@ public class Bomber extends Entity {
 
         if (BombermanGame.bomberDirection == -1) {
             curState = 0;
-            setImg(dir, curState);
+            setImg(constImage.get(dir).get(curState));
             return;
         }
         int nxtDir = canMove(BombermanGame.bomberDirection);
         if (nxtDir == dir) {
             curState = (curState + 1) % 9;
-            setImg(dir, curState / 3);
+            setImg(constImage.get(dir).get(curState / 3));
         } else {
             dir = nxtDir;
             curState = 0;
-            setImg(dir, curState);
+            setImg(constImage.get(dir).get(curState));
         }
     }
 }

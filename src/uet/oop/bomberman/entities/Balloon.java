@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Balloon extends Enemy {
-    public Balloon(int x, int y, Image img) {
-        super( x, y, img);
+    public static ArrayList <ArrayList<Image> > constImage = new ArrayList<>();
+
+    public static void load() {
         //up
         constImage.add(new ArrayList<Image>());
         //right
@@ -23,6 +24,11 @@ public class Balloon extends Enemy {
         constImage.get(3).add(Sprite.balloom_left1.getFxImage());
         constImage.get(3).add(Sprite.balloom_left2.getFxImage());
         constImage.get(3).add(Sprite.balloom_left3.getFxImage());
+    }
+
+    public Balloon(int x, int y, Image img) {
+        super( x, y, img);
+
     }
     static Random ran = new Random();
 
