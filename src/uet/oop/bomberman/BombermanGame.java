@@ -79,7 +79,7 @@ public class BombermanGame extends Application {
         Thread thr = new Thread();
 
         AnimationTimer timer = new AnimationTimer() {
-            long timeChange = 0, last = 0;
+            long last = 0;
             @Override
             public void handle(long l) {
                 update();
@@ -88,7 +88,7 @@ public class BombermanGame extends Application {
                     render();
                     return;
                 }
-                if (l - last > 1000000000 / 100) {
+                if (l - last > 1000000000 / 150) {
                     render();
                     last = l;
                 }
@@ -133,7 +133,7 @@ public class BombermanGame extends Application {
                             enemies.add(new Balloon(j, i, Sprite.balloom_left1.getFxImage()));
                             break;
                         case ('2'):
-                            enemies.add(new Oneal(j, i, Sprite.oneal_left1.getFxImage()));
+                            //enemies.add(new Oneal(j, i, Sprite.oneal_left1.getFxImage()));
                             break;
                         case ('*'):
                             bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
@@ -159,7 +159,6 @@ public class BombermanGame extends Application {
             }
         }
         stillObjects.forEach(g -> g.render(gc));
-
     }
 
     public void update() { /// update bom -> flame -> brick -> enemy -> player

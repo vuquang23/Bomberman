@@ -61,9 +61,7 @@ public class Bomber extends Entity {
             if (rect.intersects(X.getX(), X.getY(), Sprite.SCALED_SIZE,Sprite.SCALED_SIZE)) {
                 return false;
             }
-
         }
-
         return true;
     }
 
@@ -71,7 +69,7 @@ public class Bomber extends Entity {
     public void update() {
         if (BombermanGame.bomberDirection == -1) {
             curState = 0;
-            setImg();
+            setImg(dir, curState);
             return;
         }
         int aX = 0, aY = 0;
@@ -91,14 +89,16 @@ public class Bomber extends Entity {
         if (canMove(aX, aY) == true) {
             this.addX(aX * speed);
             this.addY(aY * speed);
+        } else {
+
         }
         if (BombermanGame.bomberDirection == dir) {
-            curState = (curState + 1) % 3;
-            setImg();
+            curState = (curState + 1) % 9;
+            setImg(dir, curState/3);
         } else {
             dir = BombermanGame.bomberDirection;
             curState = 0;
-            setImg();
+            setImg(dir, curState);
         }
     }
 }
