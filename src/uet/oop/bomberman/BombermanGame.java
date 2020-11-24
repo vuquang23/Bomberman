@@ -92,7 +92,11 @@ public class BombermanGame extends Application {
                     render();
                     last = l;
                 }
+                try {
+                    Thread.sleep(10);
+                } catch (Exception e) {
 
+                }
             }
         };
         timer.start();

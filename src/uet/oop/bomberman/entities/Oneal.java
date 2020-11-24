@@ -65,8 +65,8 @@ public class Oneal extends Enemy {
             int curDis = 100000000;
             int newX = this.x;
             int newY = this.y;
-            this.speed = ran.nextInt() % 6 + 1;
-            if (this.speed <= 0) this.speed += 6;
+            this.speed = ran.nextInt() % 4 + 1;
+            if (this.speed <= 0) this.speed += 4;
             for (int i = 0; i < 4; ++i) {
                 int tempX = this.x + this.speed * xx[i];
                 int tempY = this.y + this.speed * yy[i];
@@ -96,14 +96,14 @@ public class Oneal extends Enemy {
             this.setX(newX);
             this.setY(newY);
             curState += 1;
-            curState %= 3;
+            curState %= 9;
             if (this.dir == 1) {
                 this.imgDir = 1;
             }
             if (this.dir == 3) {
                 this.imgDir = 3;
             }
-            this.img = constImage.get(this.imgDir).get(this.curState);
+            this.img = constImage.get(this.imgDir).get(this.curState / 3);
             break;
         }
     }

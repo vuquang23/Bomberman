@@ -43,14 +43,14 @@ public class Balloon extends Enemy {
             this.setX(newX);
             this.setY(newY);
             curState += 1;
-            curState %= 3;
+            curState %= 9;
             if (this.dir == 1) {
                 this.imgDir = 1;
             }
             if (this.dir == 3) {
                 this.imgDir = 3;
             }
-            this.img = constImage.get(this.imgDir).get(this.curState);
+            this.img = constImage.get(this.imgDir).get(this.curState / 3);
             break;
         }
     }
