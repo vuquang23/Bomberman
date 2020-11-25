@@ -18,6 +18,7 @@ public abstract class Entity {
     protected Image img;
     protected int dir;
     protected int curState;
+    protected boolean death;
     protected Image background = Sprite.grass.getFxImage();
 
     public Entity( int x, int y, Image img) {
@@ -26,7 +27,7 @@ public abstract class Entity {
         this.img = img;
         this.dir = 1;
         this.curState = 0;
-
+        this.death = false;
     }
     public void addX(int val) {
         this.x += val;

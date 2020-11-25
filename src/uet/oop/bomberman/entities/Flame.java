@@ -53,14 +53,12 @@ public class Flame extends Entity {
         super(x, y, img);
         this.type = type;
         this.curState = -1;
-
     }
     @Override
     public void update() {
         ++curState;
         if (curState == 5) {
             curState = -1;
-
             return;
         }
         this.img = constImage.get(type).get(sta[curState]);
