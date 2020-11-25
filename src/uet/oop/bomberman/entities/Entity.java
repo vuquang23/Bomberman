@@ -16,7 +16,6 @@ public abstract class Entity {
     protected int x;
     protected int y;
     protected Image img;
-
     protected int dir;
     protected int curState;
     protected Image background = Sprite.grass.getFxImage();

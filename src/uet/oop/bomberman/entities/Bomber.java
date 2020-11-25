@@ -1,14 +1,17 @@
 package uet.oop.bomberman.entities;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
+
 import java.util.ArrayList;
+
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.BombermanGame;
 
 public class Bomber extends Entity {
     private int speed = 4;
-    private int bombLimit = 1;
-    public static ArrayList <ArrayList<Image> > constImage = new ArrayList<>();
+    private static int bombLimit = 1;
+    public static ArrayList<ArrayList<Image>> constImage = new ArrayList<>();
 
     public static void load() {
         // 0: up
@@ -64,24 +67,24 @@ public class Bomber extends Entity {
         return 0;
     }
 
-    int moveX(int curDir, Entity wall) {
+    int moveX(int curDir, Entity entity) {
         if (curDir == 1 || curDir == 3) {
             return 0;
         }
         switch (curDir) {
             case (0):
-                if (x < wall.getX()) {
+                if (x < entity.getX()) {
                     return -1;
                 }
-                if (x > wall.getX()) {
+                if (x > entity.getX()) {
                     return 1;
                 }
                 break;
             case (2):
-                if (x < wall.getX()) {
+                if (x < entity.getX()) {
                     return -1;
                 }
-                if (x > wall.getX()) {
+                if (x > entity.getX()) {
                     return 1;
                 }
                 break;
@@ -89,24 +92,24 @@ public class Bomber extends Entity {
         return 0;
     }
 
-    int moveY(int curDir, Entity wall) {
+    int moveY(int curDir, Entity entity) {
         if (curDir == 0 || curDir == 2) {
             return 0;
         }
         switch (curDir) {
             case (1):
-                if (y > wall.getY()) {
+                if (y > entity.getY()) {
                     return 1;
                 }
-                if (y < wall.getY()) {
+                if (y < entity.getY()) {
                     return -1;
                 }
                 break;
             case (3):
-                if (y > wall.getY()) {
+                if (y > entity.getY()) {
                     return 1;
                 }
-                if (y < wall.getY()) {
+                if (y < entity.getY()) {
                     return -1;
                 }
                 break;
@@ -122,7 +125,7 @@ public class Bomber extends Entity {
         boolean meetBlock = false;
         Rectangle2D rect = new Rectangle2D(newX, newY, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
 //      bomb
-        for(Bomb bomb : BombermanGame.bombs) {
+        for (Bomb bomb : BombermanGame.bombs) {
             if (rect.intersects(bomb.getX(), bomb.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE) == false) {
                 continue;
             }
@@ -175,19 +178,22 @@ public class Bomber extends Entity {
             return 2;
         }
 //        if (aY == -1) {
-            return 0;
+        return 0;
 //        }
     }
 
     void dropBomb() {
         if (BombermanGame.bombs.size() == bombLimit) return;
-        Bomb newBomb = new Bomb((x/32)*32, (y/32)*32, Sprite.bomb.getFxImage());
+        int xb = (x / 32);
+        int yb = (y / 32);
+        Bomb newBomb = new Bomb(xb, yb, Sprite.bomb.getFxImage());
         BombermanGame.bombs.add(newBomb);
     }
 
     @Override
     public void update() {
         if (BombermanGame.dropBomb == true) {
+            //System.out.println("YES");
             dropBomb();
         }
 

@@ -85,7 +85,8 @@ public class BombermanGame extends Application {
         scene.addEventFilter(KeyEvent.KEY_RELEASED, key -> {
             if (key.getCode() != KeyCode.SPACE) {
                 bomberDirection = -1;
-            } else {
+            }
+            if (key.getCode() == KeyCode.SPACE) {
                 dropBomb = false;
             }
         });
@@ -93,10 +94,9 @@ public class BombermanGame extends Application {
         // Them scene vao stage
         stage.setScene(scene);
         stage.show();
-        Thread thr = new Thread();
 
         AnimationTimer timer = new AnimationTimer() {
-            long timeChange = 0, last = 0;
+            long last = 0;
             @Override
             public void handle(long l) {
                 update();
@@ -105,15 +105,10 @@ public class BombermanGame extends Application {
                     render();
                     return;
                 }
-                if (l - last > 1000000000 / 100) {
+                if (l - last > 1000000000 / 150) {
                     render();
                     last = l;
                 }
-
-//                try {
-//                    Thread.sleep(10);
-//                } catch (Exception e) {
-//                }
             }
         };
         timer.start();
@@ -176,7 +171,6 @@ public class BombermanGame extends Application {
             }
         }
         stillObjects.forEach(g -> g.render(gc));
-
     }
 
     public void update() { /// update bom -> flame -> brick -> enemy -> player

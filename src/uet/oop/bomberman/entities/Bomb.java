@@ -25,6 +25,7 @@ public class Bomb extends Entity {
         this.len = 1;
         this.curState = -1;
     }
+
     private boolean canMove(int x, int y) {
         javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
         if (rect.intersects(BombermanGame.player.getX(), BombermanGame.player.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
