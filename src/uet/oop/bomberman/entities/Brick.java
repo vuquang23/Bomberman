@@ -11,7 +11,7 @@ public class Brick extends Entity {
     public static ArrayList <ArrayList<Image>> constImage = new ArrayList<>();
 
     @Override
-    public void update() {
+    public void update(long l) {
 
     }
 

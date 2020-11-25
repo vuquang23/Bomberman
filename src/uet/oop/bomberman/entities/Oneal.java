@@ -66,7 +66,7 @@ public class Oneal extends Enemy {
     }
 
     @Override
-    public void update() {
+    public void update(long l) {
         int[][] d = minDis();
         int n = Sprite.SCALED_SIZE * BombermanGame.WIDTH;
         int m = Sprite.SCALED_SIZE * BombermanGame.HEIGHT;

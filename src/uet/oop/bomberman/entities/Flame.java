@@ -49,16 +49,23 @@ public class Flame extends Entity {
         constImage.get(6).add(Sprite.explosion_horizontal_right_last2.getFxImage());
     }
 
-    public Flame(int x, int y, Image img, int type) {
-        super(x, y, img);
+    public Flame(int x, int y, Image img, int type, long timeChange) {
+        super(x, y, img, timeChange);
         this.type = type;
         this.curState = -1;
     }
     @Override
-    public void update() {
-        ++curState;
+    public void update(long l) {
+        if (this.death) {
+            return;
+        }
+        if (l >= this.timeChange) {
+            ++curState;
+            this.timeChange += 100000000;
+        }
+
         if (curState == 5) {
-            curState = -1;
+            this.death = true;
             return;
         }
         this.img = constImage.get(type).get(sta[curState]);

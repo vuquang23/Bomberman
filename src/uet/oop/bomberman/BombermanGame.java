@@ -99,7 +99,7 @@ public class BombermanGame extends Application {
             long last = 0;
             @Override
             public void handle(long l) {
-                update();
+                update(l);
                 if(last == 0) {
                     last = l;
                     render();
@@ -173,18 +173,16 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
     }
 
-    public void update() { /// update bom -> flame -> brick -> enemy -> player
+    public void update(long l) { /// update bom -> flame -> brick -> enemy -> player
         for (int i = 0; i < bombs.size(); ++i) {
             Bomb b = bombs.get(i);
             background.setX(b.getX());
             background.setY(b.getY());
             background.render(gc);
-            if (1 < 2) {
-                b.update();
-                if (b.getCurState() == -1) {
-                    bombs.remove(i);
-                    --i;
-                }
+            b.update(l);
+            if (b.isDeath()) {
+                bombs.remove(i);
+                --i;
             }
         }
         for (int i = 0; i < flames.size(); ++i) {
@@ -192,32 +190,30 @@ public class BombermanGame extends Application {
             background.setX(f.getX());
             background.setY(f.getY());
             background.render(gc);
-            if (1 < 2) {
-                f.update();
-                if (f.getCurState() == -1) {
-                    flames.remove(i);
-                    --i;
-                }
+            f.update(l);
+            if (f.isDeath()) {
+                flames.remove(i);
+                --i;
             }
         }
         for (Brick e : bricks) {
             background.setX(e.getX());
             background.setY(e.getY());
             background.render(gc);
-            e.update();
+            e.update(l);
         }
 
         for (Enemy e : enemies) {
             background.setX(e.getX());
             background.setY(e.getY());
             background.render(gc);
-            e.update();
+            e.update(l);
         }
 
         background.setX(player.getX());
         background.setY(player.getY());
         background.render(gc);
-        player.update();
+        player.update(l);
     }
 
     public void render() {

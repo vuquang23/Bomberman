@@ -20,8 +20,8 @@ public class Bomb extends Entity {
         constImage.get(0).add(Sprite.bomb_2.getFxImage());
     }
 
-    public Bomb(int x, int y, Image img) {
-        super(x, y, img);
+    public Bomb(int x, int y, Image img, long timeChange) {
+        super(x, y, img, timeChange);
         this.len = 2;
         this.curState = -1;
     }
@@ -50,13 +50,21 @@ public class Bomb extends Entity {
         return true;
     }
     @Override
-    public void update() {
+    public void update(long l) {
+        if (this.death) {
+            return;
+        }
         int x;
         int y;
-        ++curState;
+        if (l >= this.timeChange) {
+            ++curState;
+            this.timeChange += 400000000;
+        }
+
         if (curState == 5) {
             curState = -1;
-            BombermanGame.flames.add(new Flame(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 0));
+            this.death = true;
+            BombermanGame.flames.add(new Flame(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 0, l));
             for (int i = 1; i <= len; ++i) {
                 x = this.x - i * Sprite.SCALED_SIZE;
                 y = this.y;
@@ -64,10 +72,10 @@ public class Bomb extends Entity {
                     break;
                 }
                 if (i == len) {
-                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 4));
+                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 4, l));
                 }
                 else {
-                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 5));
+                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 5, l));
                 }
             }
             for (int i = 1; i <= len; ++i) {
@@ -77,10 +85,10 @@ public class Bomb extends Entity {
                     break;
                 }
                 if (i == len) {
-                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 6));
+                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 6, l));
                 }
                 else {
-                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 5));
+                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 5, l));
                 }
             }
             for (int i = 1; i <= len; ++i) {
@@ -90,10 +98,10 @@ public class Bomb extends Entity {
                     break;
                 }
                 if (i == len) {
-                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 1));
+                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 1, l));
                 }
                 else {
-                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 2));
+                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 2, l));
                 }
             }
             for (int i = 1; i <= len; ++i) {
@@ -103,10 +111,10 @@ public class Bomb extends Entity {
                     break;
                 }
                 if (i == len) {
-                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 3));
+                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 3, l));
                 }
                 else {
-                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 2));
+                    BombermanGame.flames.add(new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.oneal_right1.getFxImage(), 2, l));
                 }
             }
             return;

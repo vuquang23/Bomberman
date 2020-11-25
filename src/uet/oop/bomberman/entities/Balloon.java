@@ -33,7 +33,7 @@ public class Balloon extends Enemy {
     static Random ran = new Random();
 
     @Override
-    public void update() {
+    public void update(long l) {
         while (true) {
             if (this.x % 32 == 0 && this.y % 32 == 0) {
                 this.dir = ran.nextInt() % 4;

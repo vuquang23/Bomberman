@@ -20,7 +20,7 @@ public abstract class Entity {
     protected int curState;
     protected boolean death;
     protected Image background = Sprite.grass.getFxImage();
-
+    protected long timeChange;
     public Entity( int x, int y, Image img) {
         this.x = x * Sprite.SCALED_SIZE;
         this.y = y * Sprite.SCALED_SIZE;
@@ -28,6 +28,16 @@ public abstract class Entity {
         this.dir = 1;
         this.curState = 0;
         this.death = false;
+        this.timeChange = -1;
+    }
+    public Entity( int x, int y, Image img, long timeChange) {
+        this.x = x * Sprite.SCALED_SIZE;
+        this.y = y * Sprite.SCALED_SIZE;
+        this.img = img;
+        this.dir = 1;
+        this.curState = 0;
+        this.death = false;
+        this.timeChange = timeChange;
     }
     public void addX(int val) {
         this.x += val;
@@ -38,6 +48,10 @@ public abstract class Entity {
 
     public int getCurState() {
         return curState;
+    }
+
+    public boolean isDeath() {
+        return death;
     }
 
     public void setImg(Image newImg) {
@@ -63,5 +77,5 @@ public abstract class Entity {
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
     }
-    public abstract void update();
+    public abstract void update(long l);
 }

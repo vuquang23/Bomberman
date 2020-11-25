@@ -182,19 +182,19 @@ public class Bomber extends Entity {
 //        }
     }
 
-    void dropBomb() {
+    void dropBomb(long l) {
         if (BombermanGame.bombs.size() == bombLimit) return;
         int xb = (x / 32);
         int yb = (y / 32);
-        Bomb newBomb = new Bomb(xb, yb, Sprite.bomb.getFxImage());
+        Bomb newBomb = new Bomb(xb, yb, Sprite.bomb.getFxImage(), l);
         BombermanGame.bombs.add(newBomb);
     }
 
     @Override
-    public void update() {
+    public void update(long l) {
         if (BombermanGame.dropBomb == true) {
             //System.out.println("YES");
-            dropBomb();
+            dropBomb(l);
         }
 
         if (BombermanGame.bomberDirection == -1) {
@@ -211,5 +211,6 @@ public class Bomber extends Entity {
             curState = 0;
             setImg(constImage.get(dir).get(curState));
         }
+
     }
 }

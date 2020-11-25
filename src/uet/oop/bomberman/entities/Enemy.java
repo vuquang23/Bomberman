@@ -30,7 +30,7 @@ public class Enemy extends Entity {
         return true;
     }
     @Override
-    public void update() {
+    public void update(long l) {
 
     }
 }
