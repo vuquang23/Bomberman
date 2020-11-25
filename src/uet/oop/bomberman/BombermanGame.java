@@ -227,6 +227,12 @@ public class BombermanGame extends Application {
     }
 
     public void render() {
+        for(Bomb b : bombs) {
+            b.render(gc);
+        }
+        for(Flame f : flames) {
+            f.render(gc);
+        }
         for(Brick e : bricks) {
             e.render(gc);
         }

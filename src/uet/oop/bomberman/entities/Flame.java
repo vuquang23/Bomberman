@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Flame extends Entity {
     private int type;
-    private int sta[] = {0, 1, 2, 1, 0};
+    private final int sta[] = {0, 1, 2, 1, 0};
     public static ArrayList <ArrayList<Image> > constImage = new ArrayList<>();
 
     public static void load() {
@@ -60,6 +60,7 @@ public class Flame extends Entity {
         ++curState;
         if (curState == 5) {
             curState = -1;
+
             return;
         }
         this.img = constImage.get(type).get(sta[curState]);

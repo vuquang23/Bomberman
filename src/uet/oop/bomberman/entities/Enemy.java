@@ -16,7 +16,7 @@ public class Enemy extends Entity {
         this.imgDir = 1;
     }
     public boolean canMove(int x, int y) {
-         javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
         for (Wall wall : BombermanGame.stillObjects) {
             if (rect.intersects(wall.getX(), wall.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
                 return false;

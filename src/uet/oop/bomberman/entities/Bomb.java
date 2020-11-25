@@ -1,5 +1,6 @@
 package uet.oop.bomberman.entities;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.graphics.Sprite;
@@ -25,7 +26,27 @@ public class Bomb extends Entity {
         this.curState = -1;
     }
     private boolean canMove(int x, int y) {
-        return false;
+        javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        if (rect.intersects(BombermanGame.player.getX(), BombermanGame.player.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+            BombermanGame.player.curState = -1;
+        }
+        for (Enemy b : BombermanGame.enemies) {
+            if (rect.intersects(b.getX(), b.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                b.curState = -1;
+            }
+        }
+        for (Wall wall : BombermanGame.stillObjects) {
+            if (rect.intersects(wall.getX(), wall.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                return false;
+            }
+        }
+        for (Brick a : BombermanGame.bricks) {
+            if (rect.intersects(a.getX(), a.getY(), Sprite.SCALED_SIZE,Sprite.SCALED_SIZE)) {
+                a.curState = -1;
+                return false;
+            }
+        }
+        return true;
     }
     @Override
     public void update() {
@@ -39,7 +60,7 @@ public class Bomb extends Entity {
                 x = this.x - i * Sprite.SCALED_SIZE;
                 y = this.y;
                 if (canMove(x, y) == false) {
-                    continue;
+                    break;
                 }
                 if (i == len) {
                     BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 1));
@@ -47,10 +68,12 @@ public class Bomb extends Entity {
                 else {
                     BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 2));
                 }
+            }
+            for (int i = 1; i <= len; ++i) {
                 x = this.x + i * Sprite.SCALED_SIZE;
                 y = this.y;
                 if (canMove(x, y) == false) {
-                    continue;
+                    break;
                 }
                 if (i == len) {
                     BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 3));
@@ -58,10 +81,12 @@ public class Bomb extends Entity {
                 else {
                     BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 2));
                 }
+            }
+            for (int i = 1; i <= len; ++i) {
                 x = this.x;
                 y = this.y - i * Sprite.SCALED_SIZE;
                 if (canMove(x, y) == false) {
-                    continue;
+                    break;
                 }
                 if (i == len) {
                     BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 4));
@@ -69,10 +94,12 @@ public class Bomb extends Entity {
                 else {
                     BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 5));
                 }
+            }
+            for (int i = 1; i <= len; ++i) {
                 x = this.x;
                 y = this.y + i * Sprite.SCALED_SIZE;
                 if (canMove(x, y) == false) {
-                    continue;
+                    break;
                 }
                 if (i == len) {
                     BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 6));
@@ -81,7 +108,6 @@ public class Bomb extends Entity {
                     BombermanGame.flames.add(new Flame(x, y, Sprite.oneal_right1.getFxImage(), 5));
                 }
             }
-
             return;
         }
         this.img = constImage.get(0).get(sta[curState]);
