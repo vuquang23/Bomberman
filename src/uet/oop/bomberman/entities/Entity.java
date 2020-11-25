@@ -60,8 +60,16 @@ public abstract class Entity {
         return y;
     }
 
+    public boolean isDeath() {
+        return death;
+    }
+
+    public void setCurState(int curState) {
+        this.curState = curState;
+    }
+
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
     }
-    public abstract void update();
+    public void update() {}
 }

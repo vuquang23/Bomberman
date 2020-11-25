@@ -99,7 +99,7 @@ public class BombermanGame extends Application {
             long last = 0;
             @Override
             public void handle(long l) {
-                update();
+                update(l);
                 if(last == 0) {
                     last = l;
                     render();
@@ -173,20 +173,27 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
     }
 
-    public void update() { /// update bom -> flame -> brick -> enemy -> player
+    public void update(long now) { /// update bom -> flame -> brick -> enemy -> player
         for (int i = 0; i < bombs.size(); ++i) {
             Bomb b = bombs.get(i);
             background.setX(b.getX());
             background.setY(b.getY());
             background.render(gc);
+//            if (b.isDeath()) {
+//                b.setCurState(-1);
+//            }
             if (1 < 2) {
-                b.update();
+                b.update(now);
                 if (b.getCurState() == -1) {
                     bombs.remove(i);
                     --i;
+
                 }
+
             }
         }
+
+
         for (int i = 0; i < flames.size(); ++i) {
             Flame f = flames.get(i);
             background.setX(f.getX());
@@ -217,7 +224,7 @@ public class BombermanGame extends Application {
         background.setX(player.getX());
         background.setY(player.getY());
         background.render(gc);
-        player.update();
+        player.update(now);
     }
 
     public void render() {

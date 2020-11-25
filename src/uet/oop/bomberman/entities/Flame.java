@@ -10,6 +10,7 @@ public class Flame extends Entity {
     private int type;
     private final int sta[] = {0, 1, 2, 1, 0};
     public static ArrayList <ArrayList<Image> > constImage = new ArrayList<>();
+    long timeChange;
 
     public static void load() {
         // center
@@ -49,14 +50,18 @@ public class Flame extends Entity {
         constImage.get(6).add(Sprite.explosion_horizontal_right_last2.getFxImage());
     }
 
-    public Flame(int x, int y, Image img, int type) {
+    public Flame(int x, int y, Image img, int type, long now) {
         super(x, y, img);
         this.type = type;
-        this.curState = -1;
+        this.curState = 0;
+        timeChange = now;
     }
-    @Override
-    public void update() {
-        ++curState;
+
+    public void update(long now) {
+        if (now - timeChange >= 400000000) {
+            ++curState;
+            timeChange = now;
+        }
         if (curState == 5) {
             curState = -1;
             return;
