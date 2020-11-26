@@ -24,6 +24,11 @@ public class Oneal extends Enemy {
         constImage.get(3).add(Sprite.oneal_left1.getFxImage());
         constImage.get(3).add(Sprite.oneal_left2.getFxImage());
         constImage.get(3).add(Sprite.oneal_left3.getFxImage());
+        constImage.add(new ArrayList<Image>());
+        constImage.get(4).add(Sprite.oneal_dead.getFxImage());
+        constImage.get(4).add(Sprite.mob_dead1.getFxImage());
+        constImage.get(4).add(Sprite.mob_dead2.getFxImage());
+        constImage.get(4).add(Sprite.mob_dead3.getFxImage());
     }
 
     public Oneal(int x, int y, Image img) {
@@ -67,6 +72,17 @@ public class Oneal extends Enemy {
 
     @Override
     public void update(long l) {
+        if (this.isDeath()) {
+            if (l >= timeChange) {
+                timeChange += 400000000;
+                ++curState;
+                if (curState == 4) {
+                    return;
+                }
+                this.img = constImage.get(4).get(curState);
+            }
+            return;
+        }
         int[][] d = minDis();
         int n = Sprite.SCALED_SIZE * BombermanGame.WIDTH;
         int m = Sprite.SCALED_SIZE * BombermanGame.HEIGHT;
