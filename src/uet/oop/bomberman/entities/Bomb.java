@@ -38,23 +38,23 @@ public class Bomb extends Entity {
 
     private boolean canMove(int x, int y, long l) {
         javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
-        if (rect.intersects(BombermanGame.player.getX(), BombermanGame.player.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
-            if (BombermanGame.player.death == false) {
-                BombermanGame.player.death = true;
-                BombermanGame.player.curState = -1;
-                BombermanGame.player.timeChange = l;
-            }
-        }
-        for (Enemy b : BombermanGame.enemies) {
-            if (b.isDeath()) {
-                continue;
-            }
-            if (rect.intersects(b.getX(), b.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
-                b.death = true;
-                b.curState = -1;
-                b.timeChange = l;
-            }
-        }
+//        if (rect.intersects(BombermanGame.player.getX(), BombermanGame.player.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+//            if (BombermanGame.player.death == false) {
+//                BombermanGame.player.death = true;
+//                BombermanGame.player.curState = -1;
+//                BombermanGame.player.timeChange = l;
+//            }
+//        }
+//        for (Enemy b : BombermanGame.enemies) {
+//            if (b.isDeath()) {
+//                continue;
+//            }
+//            if (rect.intersects(b.getX(), b.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+//                b.death = true;
+//                b.curState = -1;
+//                b.timeChange = l;
+//            }
+//        }
         for (Wall wall : BombermanGame.stillObjects) {
             if (rect.intersects(wall.getX(), wall.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
                 return false;

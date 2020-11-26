@@ -1,6 +1,8 @@
 package uet.oop.bomberman.entities;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.ArrayList;
@@ -50,6 +52,15 @@ public class Balloon extends Enemy {
             }
             return;
         }
+        javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        for (Flame f : BombermanGame.flames) {
+            if (rect.intersects(f.getX(), f.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                this.death = true;
+                this.curState = -1;
+                this.timeChange = l;
+                return;
+            }
+        }
         Collections.shuffle(randomDir);
         if (this.x % 32 == 0 && this.y % 32 == 0) {
             this.dir = ran.nextInt() % 4;
@@ -74,8 +85,10 @@ public class Balloon extends Enemy {
                 newY = this.y;
             }
         }
+
         this.setX(newX);
         this.setY(newY);
+
         curState += 1;
         curState %= 9;
         if (this.dir == 1) {
