@@ -9,7 +9,7 @@ public class Brick extends Entity {
     private int containItem;
 
     public Brick(int x, int y, Image img) {
-        super( x, y, img);
+        super(x, y, img);
         containItem = -1;
     }
     public static ArrayList <ArrayList<Image>> constImage = new ArrayList<>();

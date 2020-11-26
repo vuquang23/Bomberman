@@ -222,6 +222,7 @@ public class BombermanGame extends Application {
                 --i;
             }
         }
+
         for (int i = 0; i < bricks.size(); ++i) {
             Brick e = bricks.get(i);
             background.setX(e.getX());

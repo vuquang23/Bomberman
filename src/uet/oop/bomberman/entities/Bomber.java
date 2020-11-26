@@ -213,7 +213,7 @@ public class Bomber extends Entity {
     public void getBonus() {
         Rectangle2D rect = new Rectangle2D(this.x, this.y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
         for (Item i : BombermanGame.items) {
-            if (i.isOpen() == false) continue;
+            if (i.isOpen() == false || i.isDeath()) continue;
             if (rect.intersects(i.getX(), i.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
                 i.setDeath(true);
                 switch (i.getType()) {
@@ -227,6 +227,7 @@ public class Bomber extends Entity {
                         this.upLimitBomb();
                         break;
                 }
+                return;
             }
         }
     }
@@ -275,7 +276,7 @@ public class Bomber extends Entity {
         int nxtDir = canMove(BombermanGame.bomberDirection);
 
         if (touchFlameOrEnemy(l)) {
-            this.death = true;
+            this.setDeath(true);
             this.curState = -1;
             this.timeChange = l;
             return;

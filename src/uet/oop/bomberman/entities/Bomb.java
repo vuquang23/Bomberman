@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Bomb extends Entity {
-    public static int len;
+    public static int len = 1;
     private static int sta[] = {0, 1, 2, 1, 0};
     public static ArrayList<ArrayList<Image>> constImage = new ArrayList<>();
     public boolean killedByOtherBomb;
@@ -23,7 +23,6 @@ public class Bomb extends Entity {
 
     public Bomb(int x, int y, Image img, long timeChange) {
         super(x, y, img, timeChange);
-        this.len = 1;
         this.curState = -1;
         this.killedByOtherBomb = false;
     }
