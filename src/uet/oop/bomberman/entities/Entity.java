@@ -45,6 +45,10 @@ public abstract class Entity {
         return death;
     }
 
+    public void setDeath(boolean death) {
+        this.death = death;
+    }
+
     public void setImg(Image newImg) {
         img = newImg;
     }
