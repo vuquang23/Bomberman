@@ -233,9 +233,13 @@ public class BombermanGame extends Application {
                 --i;
             }
         }
-
+        boolean calcDis = false;
         for (int i = enemies.size() - 1; i >= 0; --i) {
             Enemy e = enemies.get(i);
+            if (e instanceof Oneal && calcDis == false) {
+                calcDis = true;
+                ((Oneal) e).minDis();
+            }
             background.setX(e.getX());
             background.setY(e.getY());
             background.render(gc);

@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Oneal extends Enemy {
     final private int maxSpeed = 2;
-
+    public static int[][] d = new int[Sprite.SCALED_SIZE * BombermanGame.WIDTH][Sprite.SCALED_SIZE * BombermanGame.HEIGHT];
     public static ArrayList <ArrayList<Image> > constImage = new ArrayList<>();
 
     public static void load() {
@@ -32,10 +32,9 @@ public class Oneal extends Enemy {
     public Oneal(int x, int y, Image img) {
         super(x, y, img);
     }
-    public int[][] minDis() {
+    public void minDis() {
         int n = Sprite.SCALED_SIZE * BombermanGame.WIDTH;
         int m = Sprite.SCALED_SIZE * BombermanGame.HEIGHT;
-        int[][] d = new int[n][m];
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < m; ++j) {
                 d[i][j] = 100000000;
@@ -62,7 +61,6 @@ public class Oneal extends Enemy {
                 qY[bot++] = y;
             }
         }
-        return d;
     }
 
     @Override
@@ -78,7 +76,6 @@ public class Oneal extends Enemy {
             }
             return;
         }
-        int[][] d = minDis();
         int n = Sprite.SCALED_SIZE * BombermanGame.WIDTH;
         int m = Sprite.SCALED_SIZE * BombermanGame.HEIGHT;
         int nextDir = 0;
