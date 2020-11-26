@@ -8,8 +8,7 @@ import java.util.*;
 
 public class Oneal extends Enemy {
     final private int maxSpeed = 2;
-    static Random ran = new Random();
-    List <Integer> randomDir = new ArrayList<Integer>();
+
     public static ArrayList <ArrayList<Image> > constImage = new ArrayList<>();
 
     public static void load() {
@@ -32,9 +31,6 @@ public class Oneal extends Enemy {
 
     public Oneal(int x, int y, Image img) {
         super(x, y, img);
-        for (int i = 0; i < 4; ++i) {
-            randomDir.add(i);
-        }
     }
     public int[][] minDis() {
         int n = Sprite.SCALED_SIZE * BombermanGame.WIDTH;
@@ -85,53 +81,62 @@ public class Oneal extends Enemy {
         int[][] d = minDis();
         int n = Sprite.SCALED_SIZE * BombermanGame.WIDTH;
         int m = Sprite.SCALED_SIZE * BombermanGame.HEIGHT;
-        while (true) {
-            int nextDir = 0;
-            int curDis = 100000000;
-            int newX = this.x;
-            int newY = this.y;
-            this.speed = ran.nextInt() % maxSpeed + 1;
-            if (this.speed <= 0) this.speed += maxSpeed;
-            Collections.shuffle(randomDir);
-            for (int id = 0; id < 4; ++id) {
-                int i = randomDir.get(id).intValue();
-                int tempX = this.x + this.speed * xx[i];
-                int tempY = this.y + this.speed * yy[i];
-                if (tempX < 0 || tempY < 0 || tempX >= n || tempY >= m) {
-                    continue;
-                }
-                if (curDis > d[tempX][tempY]) {
-                    curDis = d[tempX][tempY];
-                    nextDir = i;
-                    newX = tempX;
-                    newY = tempY;
-                }
-            }
-            if (curDis == 100000000) {
-                if (this.x % 32 == 0 && this.y % 32 == 0) {
-                    this.dir = ran.nextInt() % 4;
-                    if (this.dir < 0) {
-                        this.dir += 4;
-                    }
-                }
-                newX = this.x + xx[this.dir] * this.speed;
-                newY = this.y + yy[this.dir] * this.speed;
-            }
-            if (canMove(newX, newY) == false) {
+        int nextDir = 0;
+        int curDis = 100000000;
+        int newX = this.x;
+        int newY = this.y;
+        this.speed = ran.nextInt() % maxSpeed + 1;
+        if (this.speed <= 0) this.speed += maxSpeed;
+        Collections.shuffle(randomDir);
+        for (int id = 0; id < 4; ++id) {
+            int i = randomDir.get(id).intValue();
+            int tempX = this.x + this.speed * xx[i];
+            int tempY = this.y + this.speed * yy[i];
+            if (tempX < 0 || tempY < 0 || tempX >= n || tempY >= m) {
                 continue;
             }
-            this.setX(newX);
-            this.setY(newY);
-            curState += 1;
-            curState %= 9;
-            if (this.dir == 1) {
-                this.imgDir = 1;
+            if (curDis > d[tempX][tempY]) {
+                curDis = d[tempX][tempY];
+                nextDir = i;
+                newX = tempX;
+                newY = tempY;
             }
-            if (this.dir == 3) {
-                this.imgDir = 3;
-            }
-            this.img = constImage.get(this.imgDir).get(this.curState / 3);
-            break;
         }
+        if (curDis == 100000000) {
+            if (this.x % 32 == 0 && this.y % 32 == 0) {
+                this.dir = ran.nextInt() % 4;
+                if (this.dir < 0) {
+                    this.dir += 4;
+                }
+            }
+            newX = this.x + xx[this.dir] * this.speed;
+            newY = this.y + yy[this.dir] * this.speed;
+            if (!canMove(newX, newY)) {
+                for (int id = 0; id < 4; ++id) {
+                    int i = randomDir.get(id).intValue();
+                    newX = this.x + xx[i] * this.speed;
+                    newY = this.y + yy[i] * this.speed;
+                    if (canMove(newX, newY)) {
+                        this.dir = i;
+                        break;
+                    }
+                }
+                if (!canMove(newX, newY)) {
+                    newX = this.x;
+                    newY = this.y;
+                }
+            }
+        }
+        this.setX(newX);
+        this.setY(newY);
+        curState += 1;
+        curState %= 9;
+        if (this.dir == 1) {
+            this.imgDir = 1;
+        }
+        if (this.dir == 3) {
+            this.imgDir = 3;
+        }
+        this.img = constImage.get(this.imgDir).get(this.curState / 3);
     }
 }

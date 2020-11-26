@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class Balloon extends Enemy {
@@ -49,30 +50,40 @@ public class Balloon extends Enemy {
             }
             return;
         }
-        while (true) {
-            if (this.x % 32 == 0 && this.y % 32 == 0) {
-                this.dir = ran.nextInt() % 4;
-                if (this.dir < 0) {
-                    this.dir += 4;
+        Collections.shuffle(randomDir);
+        if (this.x % 32 == 0 && this.y % 32 == 0) {
+            this.dir = ran.nextInt() % 4;
+            if (this.dir < 0) {
+                this.dir += 4;
+            }
+        }
+        int newX = this.x + xx[this.dir] * this.speed;
+        int newY = this.y + yy[this.dir] * this.speed;
+        if (!canMove(newX, newY)) {
+            for (int id = 0; id < 4; ++id) {
+                int i = randomDir.get(id).intValue();
+                newX = this.x + xx[i] * this.speed;
+                newY = this.y + yy[i] * this.speed;
+                if (canMove(newX, newY)) {
+                    this.dir = i;
+                    break;
                 }
             }
-            int newX = this.x + xx[this.dir] * this.speed;
-            int newY = this.y + yy[this.dir] * this.speed;
-            if (canMove(newX, newY) == false) {
-                continue;
+            if (!canMove(newX, newY)) {
+                newX = this.x;
+                newY = this.y;
             }
-            this.setX(newX);
-            this.setY(newY);
-            curState += 1;
-            curState %= 9;
-            if (this.dir == 1) {
-                this.imgDir = 1;
-            }
-            if (this.dir == 3) {
-                this.imgDir = 3;
-            }
-            this.img = constImage.get(this.imgDir).get(this.curState / 3);
-            break;
         }
+        this.setX(newX);
+        this.setY(newY);
+        curState += 1;
+        curState %= 9;
+        if (this.dir == 1) {
+            this.imgDir = 1;
+        }
+        if (this.dir == 3) {
+            this.imgDir = 3;
+        }
+        this.img = constImage.get(this.imgDir).get(this.curState / 3);
     }
 }
