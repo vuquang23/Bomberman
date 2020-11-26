@@ -27,7 +27,7 @@ public class Enemy extends Entity {
     public boolean canMove(int newX, int newY) {
         Rectangle2D rect = new Rectangle2D(newX, newY, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
         Rectangle2D initRect = new Rectangle2D(this.x, this.y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
-       for (Bomb bomb : BombermanGame.bombs) {
+        for (Bomb bomb : BombermanGame.bombs) {
             if (initRect.intersects(bomb.getX(), bomb.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
                 continue;
             }
