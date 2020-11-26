@@ -10,7 +10,7 @@ import uet.oop.bomberman.BombermanGame;
 
 public class Bomber extends Entity {
     private int speed = 4;
-    private static int bombLimit = 1;
+    private static int bombLimit = 2;
     public static ArrayList<ArrayList<Image>> constImage = new ArrayList<>();
 
     public static void load() {
@@ -188,6 +188,7 @@ public class Bomber extends Entity {
     }
 
     void dropBomb(long l) {
+        System.out.println(BombermanGame.bombs.size());
         if (BombermanGame.bombs.size() == bombLimit) return;
         int xb = (x / 32);
         int yb = (y / 32);
@@ -197,10 +198,12 @@ public class Bomber extends Entity {
 
     @Override
     public void update(long l) {
-        if (BombermanGame.dropBomb == true) {
+        if (BombermanGame.dropBomb == true && BombermanGame.predropBomb == false) {
             //System.out.println("YES");
             dropBomb(l);
         }
+        // SPACE lasts ... ns
+        BombermanGame.predropBomb = BombermanGame.dropBomb;
 
         if (BombermanGame.bomberDirection == -1) {
             curState = 0;

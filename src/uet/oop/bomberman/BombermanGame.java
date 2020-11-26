@@ -36,6 +36,7 @@ public class BombermanGame extends Application {
     public static int bomberDirection = -1;
     public static Bomber player;
     public static boolean dropBomb = false;
+    public static boolean predropBomb = false;
 
     public static void main(String[] args) {
         loadAll();

@@ -1,16 +1,8 @@
 package uet.oop.bomberman.entities;
 
-import javafx.geometry.Bounds;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import uet.oop.bomberman.graphics.Sprite;
-import javafx.scene.shape.Rectangle;
-
-import java.util.ArrayList;
 
 public abstract class Entity {
     protected int x;
@@ -19,7 +11,6 @@ public abstract class Entity {
     protected int dir;
     protected int curState;
     protected boolean death;
-    protected Image background = Sprite.grass.getFxImage();
     protected long timeChange;
     public Entity( int x, int y, Image img) {
         this.x = x * Sprite.SCALED_SIZE;
