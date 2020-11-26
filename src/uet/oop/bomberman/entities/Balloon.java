@@ -8,7 +8,6 @@ import java.util.Random;
 
 public class Balloon extends Enemy {
     public static ArrayList <ArrayList<Image> > constImage = new ArrayList<>();
-
     public static void load() {
         //up
         constImage.add(new ArrayList<Image>());
@@ -24,16 +23,32 @@ public class Balloon extends Enemy {
         constImage.get(3).add(Sprite.balloom_left1.getFxImage());
         constImage.get(3).add(Sprite.balloom_left2.getFxImage());
         constImage.get(3).add(Sprite.balloom_left3.getFxImage());
+        /// dead
+        constImage.add(new ArrayList<Image>());
+        constImage.get(4).add(Sprite.balloom_dead.getFxImage());
+        constImage.get(4).add(Sprite.mob_dead1.getFxImage());
+        constImage.get(4).add(Sprite.mob_dead2.getFxImage());
+        constImage.get(4).add(Sprite.mob_dead3.getFxImage());
     }
 
     public Balloon(int x, int y, Image img) {
         super( x, y, img);
-
     }
     static Random ran = new Random();
 
     @Override
     public void update(long l) {
+        if (this.isDeath()) {
+            if (l >= timeChange) {
+                timeChange += 400000000;
+                ++curState;
+                if (curState == 4) {
+                    return;
+                }
+                this.img = constImage.get(4).get(curState);
+            }
+            return;
+        }
         while (true) {
             if (this.x % 32 == 0 && this.y % 32 == 0) {
                 this.dir = ran.nextInt() % 4;

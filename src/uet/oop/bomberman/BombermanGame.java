@@ -44,6 +44,7 @@ public class BombermanGame extends Application {
     }
 
     static void loadAll() {
+        Brick.load();
         Balloon.load();
         Bomb.load();
         Bomber.load();
@@ -197,20 +198,29 @@ public class BombermanGame extends Application {
                 --i;
             }
         }
-        for (Brick e : bricks) {
+        for (int i = 0; i < bricks.size(); ++i) {
+            Brick e = bricks.get(i);
             background.setX(e.getX());
             background.setY(e.getY());
             background.render(gc);
             e.update(l);
+            if (e.isDeath() && e.getCurState() == 3) {
+                bricks.remove(i);
+                --i;
+            }
         }
 
-        for (Enemy e : enemies) {
+        for (int i = 0; i < enemies.size(); ++i) {
+            Enemy e = enemies.get(i);
             background.setX(e.getX());
             background.setY(e.getY());
             background.render(gc);
             e.update(l);
+            if (e.isDeath() && e.getCurState() == 4) {
+                enemies.remove(i);
+                --i;
+            }
         }
-
         background.setX(player.getX());
         background.setY(player.getY());
         background.render(gc);

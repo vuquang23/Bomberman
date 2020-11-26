@@ -41,6 +41,11 @@ public class Bomber extends Entity {
         left.add(Sprite.player_left_1.getFxImage());
         left.add(Sprite.player_left_2.getFxImage());
         constImage.add(left);
+        ArrayList <Image> dead = new ArrayList<>();
+        dead.add(Sprite.player_dead1.getFxImage());
+        dead.add(Sprite.player_dead2.getFxImage());
+        dead.add(Sprite.player_dead3.getFxImage());
+        constImage.add(dead);
     }
 
     public Bomber(int x, int y, Image img) {
@@ -198,6 +203,17 @@ public class Bomber extends Entity {
 
     @Override
     public void update(long l) {
+        if (this.isDeath()) {
+            if (l >= timeChange) {
+                timeChange += 400000000;
+                ++curState;
+                if (curState == 3) {
+                    return;
+                }
+                this.img = constImage.get(4).get(curState);
+            }
+            return;
+        }
         if (BombermanGame.dropBomb == true && BombermanGame.predropBomb == false) {
             //System.out.println("YES");
             dropBomb(l);

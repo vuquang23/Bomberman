@@ -26,14 +26,19 @@ public class Bomb extends Entity {
         this.curState = -1;
     }
 
-    private boolean canMove(int x, int y) {
+    private boolean canMove(int x, int y, long l) {
         javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
         if (rect.intersects(BombermanGame.player.getX(), BombermanGame.player.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
             BombermanGame.player.death = true;
+            BombermanGame.player.curState = -1;
+            BombermanGame.player.timeChange = l;
+
         }
         for (Enemy b : BombermanGame.enemies) {
             if (rect.intersects(b.getX(), b.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
                 b.death = true;
+                b.curState = -1;
+                b.timeChange = l;
             }
         }
         for (Wall wall : BombermanGame.stillObjects) {
@@ -44,6 +49,8 @@ public class Bomb extends Entity {
         for (Brick a : BombermanGame.bricks) {
             if (rect.intersects(a.getX(), a.getY(), Sprite.SCALED_SIZE,Sprite.SCALED_SIZE)) {
                 a.death = true;
+                a.curState = -1;
+                a.timeChange = l;
                 return false;
             }
         }
@@ -68,7 +75,7 @@ public class Bomb extends Entity {
             for (int i = 1; i <= len; ++i) {
                 x = this.x - i * Sprite.SCALED_SIZE;
                 y = this.y;
-                if (canMove(x, y) == false) {
+                if (canMove(x, y, l) == false) {
                     break;
                 }
                 if (i == len) {
@@ -81,7 +88,7 @@ public class Bomb extends Entity {
             for (int i = 1; i <= len; ++i) {
                 x = this.x + i * Sprite.SCALED_SIZE;
                 y = this.y;
-                if (canMove(x, y) == false) {
+                if (canMove(x, y, l) == false) {
                     break;
                 }
                 if (i == len) {
@@ -94,7 +101,7 @@ public class Bomb extends Entity {
             for (int i = 1; i <= len; ++i) {
                 x = this.x;
                 y = this.y - i * Sprite.SCALED_SIZE;
-                if (canMove(x, y) == false) {
+                if (canMove(x, y, l) == false) {
                     break;
                 }
                 if (i == len) {
@@ -107,7 +114,7 @@ public class Bomb extends Entity {
             for (int i = 1; i <= len; ++i) {
                 x = this.x;
                 y = this.y + i * Sprite.SCALED_SIZE;
-                if (canMove(x, y) == false) {
+                if (canMove(x, y, l) == false) {
                     break;
                 }
                 if (i == len) {
