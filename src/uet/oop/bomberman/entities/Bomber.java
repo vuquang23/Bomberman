@@ -1,5 +1,6 @@
 package uet.oop.bomberman.entities;
 
+import com.sun.scenario.effect.impl.sw.java.JSWColorAdjustPeer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
@@ -10,7 +11,7 @@ import uet.oop.bomberman.BombermanGame;
 
 public class Bomber extends Entity {
     private int speed = 4;
-    private static int bombLimit = 2;
+    private static int bombLimit = 1;
     public static ArrayList<ArrayList<Image>> constImage = new ArrayList<>();
 
     public static void load() {
@@ -201,6 +202,35 @@ public class Bomber extends Entity {
         BombermanGame.bombs.add(newBomb);
     }
 
+    public void upSpeed() {
+        speed += 2;
+    }
+
+    public void upLimitBomb() {
+        ++bombLimit;
+    }
+
+    public void getBonus() {
+        Rectangle2D rect = new Rectangle2D(this.x, this.y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        for (Item i : BombermanGame.items) {
+            if (i.isOpen() == false) continue;
+            if (rect.intersects(i.getX(), i.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                i.setDeath(true);
+                switch (i.getType()) {
+                    case (3):
+                        this.upSpeed();
+                        break;
+                    case (2):
+                        Bomb.upBombLen();
+                        break;
+                    case (1):
+                        this.upLimitBomb();
+                        break;
+                }
+            }
+        }
+    }
+
     @Override
     public void update(long l) {
         if (this.isDeath()) {
@@ -214,6 +244,7 @@ public class Bomber extends Entity {
             }
             return;
         }
+
         if (BombermanGame.dropBomb == true && BombermanGame.predropBomb == false) {
             //System.out.println("YES");
             dropBomb(l);
@@ -236,5 +267,6 @@ public class Bomber extends Entity {
             setImg(constImage.get(dir).get(curState));
         }
 
+        getBonus();
     }
 }

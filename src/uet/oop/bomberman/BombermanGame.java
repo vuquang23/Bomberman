@@ -157,19 +157,27 @@ public class BombermanGame extends Application {
                             break;
                         case ('x'):
                             items.add(new Item(j, i, Sprite.portal.getFxImage(), 4));
-                            bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                            Brick X = new Brick(j, i, Sprite.brick.getFxImage());
+                            X.setContainItem(items.size() - 1);
+                            bricks.add(X);
                             break;
                         case ('s'):
                             items.add(new Item(j, i, Sprite.powerup_speed.getFxImage(), 3));
-                            bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                            Brick Y = new Brick(j, i, Sprite.brick.getFxImage());
+                            Y.setContainItem(items.size() - 1);
+                            bricks.add(Y);
                             break;
                         case ('f'):
                             items.add(new Item(j, i, Sprite.powerup_flames.getFxImage(), 2));
-                            bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                            Brick Z = new Brick(j, i, Sprite.brick.getFxImage());
+                            Z.setContainItem(items.size() - 1);
+                            bricks.add(Z);
                             break;
                         case ('b'):
                             items.add(new Item(j, i, Sprite.powerup_bombs.getFxImage(), 1));
-                            bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                            Brick T = new Brick(j, i, Sprite.brick.getFxImage());
+                            T.setContainItem(items.size() - 1);
+                            bricks.add(T);
                             break;
                     }
                 }
@@ -179,8 +187,6 @@ public class BombermanGame extends Application {
     }
 
     public void update(long l) { /// update bom -> flame -> brick -> enemy -> player
-
-
         for (int i = 0; i < bombs.size(); ++i) {
             Bomb b = bombs.get(i);
             background.setX(b.getX());
@@ -221,11 +227,14 @@ public class BombermanGame extends Application {
             e.update(l);
             if (e.isDeath() && e.getCurState() == 3) {
                 bricks.remove(i);
+                if (e.getContainItem() != -1) {
+                    items.get(e.getContainItem()).setOpen(true);
+                }
                 --i;
             }
         }
 
-        for (int i = 0; i < enemies.size(); ++i) {
+        for (int i = enemies.size() - 1; i >= 0; --i) {
             Enemy e = enemies.get(i);
             background.setX(e.getX());
             background.setY(e.getY());
@@ -233,9 +242,9 @@ public class BombermanGame extends Application {
             e.update(l);
             if (e.isDeath() && e.getCurState() == 4) {
                 enemies.remove(i);
-                --i;
             }
         }
+
         background.setX(player.getX());
         background.setY(player.getY());
         background.render(gc);
@@ -249,12 +258,27 @@ public class BombermanGame extends Application {
         for (Flame f : flames) {
             f.render(gc);
         }
+
+        for (Item i : items) {
+            if (i.isOpen() == false) {
+                continue;
+            }
+            if (i.isDeath()) {
+                background.setX(i.getX());
+                background.setY(i.getY());
+                background.render(gc);
+            } else {
+                i.render(gc);
+            }
+        }
+
         for (Brick e : bricks) {
             e.render(gc);
         }
         for (Enemy e : enemies) {
             e.render(gc);
         }
+
         player.render(gc);
     }
 }
