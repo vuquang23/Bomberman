@@ -11,7 +11,7 @@ import uet.oop.bomberman.BombermanGame;
 
 public class Bomber extends Entity {
     private int speed = 4;
-    private static int bombLimit = 1;
+    private static int bombLimit = 2;
     public static ArrayList<ArrayList<Image>> constImage = new ArrayList<>();
 
     public static void load() {
@@ -203,7 +203,7 @@ public class Bomber extends Entity {
     }
 
     public void upSpeed() {
-        speed += 2;
+        speed += 4;
     }
 
     public void upLimitBomb() {
