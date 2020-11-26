@@ -105,15 +105,18 @@ public class BombermanGame extends Application {
             @Override
             public void handle(long l) {
                 update(l);
-                if (last == 0) {
-                    last = l;
+//                if (last == 0) {
+//                    last = l;
+//                    render();
+//                    return;
+//                }
+               // if (l - last > 1000000000 / 1) {
                     render();
-                    return;
-                }
-                if (l - last > 1000000000 / 150) {
-                    render();
-                    last = l;
-                }
+               //     last = l;
+               // }
+                try {
+                    Thread.sleep(10);
+                } catch (Exception e) {}
             }
         };
         timer.start();
@@ -256,13 +259,6 @@ public class BombermanGame extends Application {
     }
 
     public void render() {
-        for (Bomb b : bombs) {
-            b.render(gc);
-        }
-        for (Flame f : flames) {
-            f.render(gc);
-        }
-
         for (Item i : items) {
             if (i.isOpen() == false) {
                 continue;
@@ -274,6 +270,13 @@ public class BombermanGame extends Application {
             } else {
                 i.render(gc);
             }
+        }
+
+        for (Bomb b : bombs) {
+            b.render(gc);
+        }
+        for (Flame f : flames) {
+            f.render(gc);
         }
 
         for (Brick e : bricks) {
