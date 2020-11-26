@@ -231,6 +231,21 @@ public class Bomber extends Entity {
         }
     }
 
+    public boolean touchFlameOrEnemy(long l) {
+        Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        for (Flame f : BombermanGame.flames) {
+            if (rect.intersects(f.getX(), f.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                return true;
+            }
+        }
+        for (Enemy e : BombermanGame.enemies) {
+            if (rect.intersects(e.getX(), e.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void update(long l) {
         if (this.isDeath()) {
@@ -258,15 +273,14 @@ public class Bomber extends Entity {
             return;
         }
         int nxtDir = canMove(BombermanGame.bomberDirection);
-        javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
-        for (Flame f : BombermanGame.flames) {
-            if (rect.intersects(f.getX(), f.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
-                this.death = true;
-                this.curState = -1;
-                this.timeChange = l;
-                return;
-            }
+
+        if (touchFlameOrEnemy(l)) {
+            this.death = true;
+            this.curState = -1;
+            this.timeChange = l;
+            return;
         }
+
         if (nxtDir == dir) {
             curState = (curState + 1) % 9;
             setImg(constImage.get(dir).get(curState / 3));
