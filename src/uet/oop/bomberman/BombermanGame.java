@@ -179,8 +179,6 @@ public class BombermanGame extends Application {
     }
 
     public void update(long l) { /// update bom -> flame -> brick -> enemy -> player
-
-
         for (int i = 0; i < bombs.size(); ++i) {
             Bomb b = bombs.get(i);
             background.setX(b.getX());
