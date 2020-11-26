@@ -13,6 +13,7 @@ public class Bomber extends Entity {
     private int speed = 4;
     private static int bombLimit = 2;
     public static ArrayList<ArrayList<Image>> constImage = new ArrayList<>();
+    private boolean upSpeed;
 
     public static void load() {
         // 0: up
@@ -51,6 +52,7 @@ public class Bomber extends Entity {
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
+        upSpeed = false;
     }
 
     int dirX(int dir) {
@@ -208,7 +210,15 @@ public class Bomber extends Entity {
         BombermanGame.bombs.add(newBomb);
     }
 
+    public void setUpSpeed(boolean upSpeed) {
+        this.upSpeed = upSpeed;
+    }
+
     public void upSpeed() {
+        if ((this.upSpeed == false) || (x % 32 != 0) || (y % 32) != 0) {
+            return;
+        }
+        this.setUpSpeed(false);
         speed += 4;
     }
 
@@ -224,7 +234,7 @@ public class Bomber extends Entity {
                 i.setDeath(true);
                 switch (i.getType()) {
                     case (3):
-                        this.upSpeed();
+                        this.setUpSpeed(true);
                         break;
                     case (2):
                         Bomb.upBombLen();
@@ -287,6 +297,8 @@ public class Bomber extends Entity {
             setImg(constImage.get(dir).get(curState));
             return;
         }
+        this.upSpeed();
+
         int nxtDir = canMove(BombermanGame.bomberDirection);
 
         if (touchFlameOrEnemy(l)) {
