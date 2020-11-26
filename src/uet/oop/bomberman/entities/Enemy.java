@@ -16,7 +16,17 @@ public class Enemy extends Entity {
         this.imgDir = 1;
     }
     public boolean canMove(int x, int y) {
-        javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        //Rectangle2D initRect = new Rectangle2D(u, v, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        for (Bomb bomb : BombermanGame.bombs) {
+//            if (initRect.intersects(bomb.getX(), bomb.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE) == true) {
+//                continue;
+//            }
+            if (rect.intersects(bomb.getX(), bomb.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                return false;
+            }
+        }
+
         for (Wall wall : BombermanGame.stillObjects) {
             if (rect.intersects(wall.getX(), wall.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
                 return false;

@@ -143,13 +143,10 @@ public class Bomb extends Entity {
         if (this.death) {
             return;
         }
-        int newX;
-        int newY;
         if (l >= this.timeChange) {
             ++curState;
             this.timeChange += 400000000;
         }
-
         if (curState == 5) {
             curState = -1;
             this.death = true;
