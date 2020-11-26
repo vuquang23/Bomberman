@@ -198,6 +198,12 @@ public class Bomber extends Entity {
         if (BombermanGame.bombs.size() == bombLimit) return;
         int xb = (x / 32);
         int yb = (y / 32);
+        Rectangle2D rect = new Rectangle2D(xb * Sprite.SCALED_SIZE, yb * Sprite.SCALED_SIZE, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        for (Bomb b : BombermanGame.bombs) {
+            if (rect.intersects(b.getX(), b.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                return;
+            }
+        }
         Bomb newBomb = new Bomb(xb, yb, Sprite.bomb.getFxImage(), l);
         BombermanGame.bombs.add(newBomb);
     }
@@ -260,7 +266,15 @@ public class Bomber extends Entity {
             }
             return;
         }
-
+        javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+        for (Flame f : BombermanGame.flames) {
+            if (rect.intersects(f.getX(), f.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                this.death = true;
+                this.curState = -1;
+                this.timeChange = l;
+                return;
+            }
+        }
         if (BombermanGame.dropBomb == true && BombermanGame.predropBomb == false) {
             //System.out.println("YES");
             dropBomb(l);
