@@ -55,7 +55,7 @@ public class Balloon extends Enemy {
         javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
         for (Flame f : BombermanGame.flames) {
             if (rect.intersects(f.getX(), f.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
-                this.death = true;
+                this.setDeath(true);
                 this.curState = -1;
                 this.timeChange = l;
                 return;

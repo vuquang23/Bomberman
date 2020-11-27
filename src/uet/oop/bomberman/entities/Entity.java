@@ -12,7 +12,7 @@ public abstract class Entity {
     protected int curState;
     protected boolean death;
     protected long timeChange;
-    public Entity( int x, int y, Image img) {
+    public Entity(int x, int y, Image img) {
         this.x = x * Sprite.SCALED_SIZE;
         this.y = y * Sprite.SCALED_SIZE;
         this.img = img;
@@ -30,15 +30,13 @@ public abstract class Entity {
         this.death = false;
         this.timeChange = timeChange;
     }
-    public void addX(int val) {
-        this.x += val;
-    }
-    public void addY(int val) {
-        this.y += val;
-    }
 
     public int getCurState() {
         return curState;
+    }
+
+    public void setCurState(int x) {
+        this.curState = x;
     }
 
     public boolean isDeath() {
@@ -47,6 +45,26 @@ public abstract class Entity {
 
     public void setDeath(boolean death) {
         this.death = death;
+    }
+
+    public void setTimeChange(long timeChange) {
+        this.timeChange = timeChange;
+    }
+
+    public void setDir(int dir) {
+        this.dir = dir;
+    }
+
+    public int getDir() {
+        return dir;
+    }
+
+    public long getTimeChange() {
+        return timeChange;
+    }
+
+    public void addTimeChange(long x) {
+        timeChange += x;
     }
 
     public void setImg(Image newImg) {

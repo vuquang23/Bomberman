@@ -13,11 +13,12 @@ import uet.oop.bomberman.graphics.Sprite;
 
 import javafx.scene.input.KeyEvent;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 
 public class BombermanGame extends Application {
 
@@ -32,13 +33,14 @@ public class BombermanGame extends Application {
     public static List<Wall> stillObjects = new ArrayList<>();
     public static List<Flame> flames = new ArrayList<>();
     public static List<Bomb> bombs = new ArrayList<>();
-    static String path = System.getProperty("user.dir") + "/res/levels/";
+    static String path = System.getProperty("user.dir") + "/res/";
     static Entity background = new Grass(0, 0, Sprite.grass.getFxImage());
     public static int bomberDirection = -1;
     public static Bomber player;
     public static boolean dropBomb = false;
     public static boolean predropBomb = false;
     public static int curIdBomb = -1;
+
 
     public static void main(String[] args) {
         loadAll();
@@ -52,6 +54,17 @@ public class BombermanGame extends Application {
         Bomber.load();
         Flame.load();
         Oneal.load();
+    }
+
+    public static void playSound(String fileName) {
+        fileName = path + "sounds/" + fileName;
+        try {
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File(fileName)));
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -100,36 +113,27 @@ public class BombermanGame extends Application {
         stage.show();
 
         AnimationTimer timer = new AnimationTimer() {
-            long last = 0;
-
             @Override
             public void handle(long l) {
                 update(l);
-//                if (last == 0) {
-//                    last = l;
-//                    render();
-//                    return;
-//                }
-               // if (l - last > 1000000000 / 1) {
-                    render();
-               //     last = l;
-               // }
+                render();
                 try {
                     Thread.sleep(10);
                 } catch (Exception e) {}
+
             }
         };
         timer.start();
 
         try {
-            createMap("Level2.txt");
+            createMap("Level1.txt");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void createMap(String fileName) throws IOException {
-        Scanner objReader = new Scanner(new File(path + fileName));
+        Scanner objReader = new Scanner(new File(path + "levels/" +fileName));
         int stage = objReader.nextInt();
         int m = objReader.nextInt();
         int n = objReader.nextInt();
@@ -189,12 +193,16 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
     }
 
+    public void setBackground(Entity e) {
+        background.setX(e.getX());
+        background.setY(e.getY());
+        background.render(gc);
+    }
+
     public void update(long l) { /// update bom -> flame -> brick -> enemy -> player
         for (int i = 0; i < bombs.size(); ++i) {
             Bomb b = bombs.get(i);
-            background.setX(b.getX());
-            background.setY(b.getY());
-            background.render(gc);
+            setBackground(b);
             curIdBomb = i;
             if (b.isKilledByOtherBomb()) {
                 b.setDeath(true);
@@ -207,36 +215,32 @@ public class BombermanGame extends Application {
         for (int i = bombs.size() - 1; i >= 0; --i) {
             Bomb b = bombs.get(i);
             if (b.isDeath()) {
+                playSound("Bomb_Explodes.wav");
                 bombs.remove(i);
             }
         }
 
-        for (int i = 0; i < flames.size(); ++i) {
+        for (int i = flames.size() - 1; i >= 0; --i) {
             Flame f = flames.get(i);
-            background.setX(f.getX());
-            background.setY(f.getY());
-            background.render(gc);
+            setBackground(f);
             f.update(l);
             if (f.isDeath()) {
                 flames.remove(i);
-                --i;
             }
         }
 
-        for (int i = 0; i < bricks.size(); ++i) {
+        for (int i = bricks.size() - 1; i >=0 ; --i) {
             Brick e = bricks.get(i);
-            background.setX(e.getX());
-            background.setY(e.getY());
-            background.render(gc);
+            setBackground(e);
             e.update(l);
             if (e.isDeath() && e.getCurState() == 3) {
                 bricks.remove(i);
                 if (e.getContainItem() != -1) {
                     items.get(e.getContainItem()).setOpen(true);
                 }
-                --i;
             }
         }
+
         boolean calcDis = false;
         for (int i = enemies.size() - 1; i >= 0; --i) {
             Enemy e = enemies.get(i);
@@ -244,24 +248,27 @@ public class BombermanGame extends Application {
                 calcDis = true;
                 ((Oneal) e).minDis();
             }
-            background.setX(e.getX());
-            background.setY(e.getY());
-            background.render(gc);
+            setBackground(e);
             e.update(l);
             if (e.isDeath() && e.getCurState() == 4) {
                 enemies.remove(i);
+                playSound("Enemy_Dead.wav");
             }
         }
 
-        background.setX(player.getX());
-        background.setY(player.getY());
-        background.render(gc);
+        setBackground(player);
         player.update(l);
+        if (player.isReborn()) {
+            player.letsreborn();
+
+
+            player.setReborn(false);
+        }
     }
 
     public void render() {
         for (Item i : items) {
-            if (i.isOpen() == false) {
+            if (!i.isOpen()) {
                 continue;
             }
             if (i.isDeath()) {

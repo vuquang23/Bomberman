@@ -1,15 +1,37 @@
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import java.io.File;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
-import java.io.*;
-import java.util.Scanner;
+public class test extends Application {
 
-public class test {
-    static String path = System.getProperty("user.dir") + "/res/levels/";
-    public static void main(String[] args) throws FileNotFoundException, IOException {
-        String fileName = "Level1.txt";
-        Scanner objReader = new Scanner(new File(path + fileName));
-        int stage = objReader.nextInt();
-        System.out.println(stage);
+    public static void main(String[] args) {
+            launch(args);
+    }
 
+    @Override
+    public void start(Stage stage) {
+        String path = System.getProperty("user.dir") + "/res/sounds/Bomb_Set.wav";
+       // String X = "/home/ngot23/Downloads/TrenTinhBanDuoiTinhYeu-MIN-6802163.mp3";
+        try {
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File(path)));
+            clip.start();
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        try {
+//            Media media = new Media(new File(X).toURI().toString());
+//            MediaPlayer mediaPlayer = new MediaPlayer(media);
+//            mediaPlayer.play();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        stage.show();
     }
 }

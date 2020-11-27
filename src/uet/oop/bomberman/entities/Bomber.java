@@ -1,6 +1,4 @@
 package uet.oop.bomberman.entities;
-
-import com.sun.scenario.effect.impl.sw.java.JSWColorAdjustPeer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
@@ -11,9 +9,11 @@ import uet.oop.bomberman.BombermanGame;
 
 public class Bomber extends Entity {
     private int speed = 4;
-    private static int bombLimit = 2;
+    private static int bombLimit = 1;
     public static ArrayList<ArrayList<Image>> constImage = new ArrayList<>();
     private boolean upSpeed;
+    private int life;
+    private boolean reborn;
 
     public static void load() {
         // 0: up
@@ -53,6 +53,8 @@ public class Bomber extends Entity {
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
         upSpeed = false;
+        life = 3;
+        reborn = false;
     }
 
     int dirX(int dir) {
@@ -135,14 +137,14 @@ public class Bomber extends Entity {
         Rectangle2D initRect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
 //      bomb
         for (Bomb bomb : BombermanGame.bombs) {
-            if (rect.intersects(bomb.getX(), bomb.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE) == false) {
+            if (!rect.intersects(bomb.getX(), bomb.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
                 continue;
             }
-            if (initRect.intersects(bomb.getX(), bomb.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE) == true) {
+            if (initRect.intersects(bomb.getX(), bomb.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
                 continue;
             }
 
-            if (meetBlock == false) {
+            if (!meetBlock) {
                 meetBlock = true;
             }
             aX += moveX(curDir, bomb);
@@ -150,7 +152,7 @@ public class Bomber extends Entity {
         }
 //      wall
         for (Wall wall : BombermanGame.stillObjects) {
-            if (rect.intersects(wall.getX(), wall.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE) == false) {
+            if (!rect.intersects(wall.getX(), wall.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
                 continue;
             }
             if (meetBlock == false) {
@@ -161,17 +163,17 @@ public class Bomber extends Entity {
         }
 //      brick
         for (Brick brick : BombermanGame.bricks) {
-            if (rect.intersects(brick.getX(), brick.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE) == false) {
+            if (!rect.intersects(brick.getX(), brick.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
                 continue;
             }
-            if (meetBlock == false) {
+            if (!meetBlock) {
                 meetBlock = true;
             }
             aX += moveX(curDir, brick);
             aY += moveY(curDir, brick);
         }
 
-        if (meetBlock == false) { /// take bonus later
+        if (!meetBlock) { /// take bonus later
             x = newX;
             y = newY;
             return curDir;
@@ -208,6 +210,7 @@ public class Bomber extends Entity {
         }
         Bomb newBomb = new Bomb(xb, yb, Sprite.bomb.getFxImage(), l);
         BombermanGame.bombs.add(newBomb);
+        BombermanGame.playSound("Bomb_Set.wav");
     }
 
     public void setUpSpeed(boolean upSpeed) {
@@ -232,6 +235,7 @@ public class Bomber extends Entity {
             if (i.isOpen() == false || i.isDeath()) continue;
             if (rect.intersects(i.getX(), i.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
                 i.setDeath(true);
+                BombermanGame.playSound("Item_Get.wav");
                 switch (i.getType()) {
                     case (3):
                         this.setUpSpeed(true);
@@ -263,60 +267,92 @@ public class Bomber extends Entity {
         return false;
     }
 
+    public void decLife() {
+        --this.life;
+    }
+
+    public boolean notReallyDie() {
+        return (this.life > 0);
+    }
+
+    public void setReborn(boolean x) {
+        this.reborn = x;
+    }
+
+    public boolean isReborn() {
+        return this.reborn;
+    }
+
+    public void letsreborn() {
+        this.setX(Sprite.SCALED_SIZE);
+        this.setY(Sprite.SCALED_SIZE);
+        this.setImg(Sprite.player_right.getFxImage());
+        this.dir = 1;
+        this.curState = 0;
+        this.death = false;
+        this.timeChange = -1;
+    }
+
     @Override
     public void update(long l) {
         if (this.isDeath()) {
-            if (l >= timeChange) {
-                timeChange += 400000000;
-                ++curState;
-                if (curState == 3) {
+            if (l >= this.getTimeChange()) {
+                this.addTimeChange(400000000);
+                this.setCurState(this.getCurState() + 1);
+                if (this.getCurState() == 3) {
+                    decLife();
+                    if (this.notReallyDie()) {
+                        this.setReborn(true);
+                    }
                     return;
                 }
-                this.img = constImage.get(4).get(curState);
+                this.setImg(constImage.get(4).get(curState));
             }
             return;
         }
-        javafx.geometry.Rectangle2D rect = new Rectangle2D(x, y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
-        for (Flame f : BombermanGame.flames) {
-            if (rect.intersects(f.getX(), f.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
-                this.death = true;
-                this.curState = -1;
-                this.timeChange = l;
-                return;
-            }
+
+        if (touchFlameOrEnemy(l)) {
+            this.setDeath(true);
+            this.setCurState(-1);
+            this.setTimeChange(l);
+            return;
         }
+
+        /*Drop the bomb*/
         if (BombermanGame.dropBomb == true && BombermanGame.predropBomb == false) {
-            //System.out.println("YES");
             dropBomb(l);
         }
         // SPACE lasts ... ns
         BombermanGame.predropBomb = BombermanGame.dropBomb;
 
-        if (BombermanGame.bomberDirection == -1) {
-            curState = 0;
-            setImg(constImage.get(dir).get(curState));
-            return;
-        }
         this.upSpeed();
 
-        int nxtDir = canMove(BombermanGame.bomberDirection);
-
-        if (touchFlameOrEnemy(l)) {
-            this.setDeath(true);
-            this.curState = -1;
-            this.timeChange = l;
+        /* not move */
+        if (BombermanGame.bomberDirection == -1) {
+            this.setCurState(0);
+            setImg(constImage.get(dir).get(curState));
             return;
         }
 
-        if (nxtDir == dir) {
-            curState = (curState + 1) % 9;
+        /* cal next direction */
+        int nxtDir = canMove(BombermanGame.bomberDirection);
+        if (touchFlameOrEnemy(l)) {
+            this.setDeath(true);
+            this.setCurState(-1);
+            this.setTimeChange(l);
+            return;
+        }
+
+        if (nxtDir == this.getDir()) {
+            this.setCurState((this.getCurState() + 1) % 9);
             setImg(constImage.get(dir).get(curState / 3));
         } else {
-            dir = nxtDir;
-            curState = 0;
+            this.setDir(nxtDir);
+            this.setCurState(0);
             setImg(constImage.get(dir).get(curState));
         }
 
+        /* get item */
         getBonus();
     }
 }
