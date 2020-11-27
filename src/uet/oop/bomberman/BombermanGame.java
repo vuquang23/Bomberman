@@ -122,7 +122,7 @@ public class BombermanGame extends Application {
         timer.start();
 
         try {
-            createMap("Level3.txt");
+            createMap("Level2.txt");
         } catch (Exception e) {
             e.printStackTrace();
         }
