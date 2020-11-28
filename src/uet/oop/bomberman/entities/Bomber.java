@@ -8,12 +8,20 @@ import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.BombermanGame;
 
 public class Bomber extends Entity {
-    private int speed = 4;
+    private static int speed = 4;
     private static int bombLimit = 1;
     public static ArrayList<ArrayList<Image>> constImage = new ArrayList<>();
     private boolean upSpeed;
     private int life;
     private boolean reborn;
+
+    public static void resetbombLimit() {
+        bombLimit = 1;
+    }
+
+    public static void resetSpeed() {
+        speed = 4;
+    }
 
     public static void load() {
         // 0: up
@@ -210,7 +218,7 @@ public class Bomber extends Entity {
         }
         Bomb newBomb = new Bomb(xb, yb, Sprite.bomb.getFxImage(), l);
         BombermanGame.bombs.add(newBomb);
-        BombermanGame.playSound("Bomb_Set.wav");
+        BombermanGame.playSound(BombermanGame.clipBombSet);
     }
 
     public void setUpSpeed(boolean upSpeed) {
@@ -232,10 +240,18 @@ public class Bomber extends Entity {
     public void getBonus() {
         Rectangle2D rect = new Rectangle2D(this.x, this.y, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
         for (Item i : BombermanGame.items) {
-            if (i.isOpen() == false || i.isDeath()) continue;
+            if (!i.isOpen() || i.isDeath()) continue;
             if (rect.intersects(i.getX(), i.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                if (i.getType() == 4) {
+                    if (BombermanGame.enemies.size() == 0) {
+                        BombermanGame.winGame = true;
+                        BombermanGame.playSound(BombermanGame.clipExitOpen);
+                    }
+                    return;
+                }
+
                 i.setDeath(true);
-                BombermanGame.playSound("Item_Get.wav");
+                BombermanGame.playSound(BombermanGame.clipitemGet);
                 switch (i.getType()) {
                     case (3):
                         this.setUpSpeed(true);

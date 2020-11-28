@@ -1,5 +1,4 @@
 package uet.oop.bomberman;
-
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -10,9 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
-
 import javafx.scene.input.KeyEvent;
-
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.*;
@@ -40,10 +37,47 @@ public class BombermanGame extends Application {
     public static boolean dropBomb = false;
     public static boolean predropBomb = false;
     public static int curIdBomb = -1;
-
+    public static String[] map = {"Level1.txt", "Level2.txt", "Level3.txt"};
+    public static int curMap = 0;
+    public static boolean winGame = false;
+    public static Clip clipBombExploydes;
+    public static Clip clipBombSet;
+    public static Clip clipEnemyDead;
+    public static Clip clipExitOpen;
+    public static Clip clipitemGet;
 
     public static void main(String[] args) {
         loadAll();
+        try {
+            clipBombExploydes = AudioSystem.getClip();
+            clipBombExploydes.open(AudioSystem.getAudioInputStream(new File(path + "sounds/Bomb_Explodes.wav")));
+
+            clipBombSet = AudioSystem.getClip();
+            clipBombSet.open(AudioSystem.getAudioInputStream(new File(path + "sounds/Bomb_Set.wav")));
+
+            clipEnemyDead = AudioSystem.getClip();
+            clipEnemyDead.open(AudioSystem.getAudioInputStream(new File(path + "sounds/Enemy_Dead.wav")));
+
+            clipExitOpen = AudioSystem.getClip();
+            clipExitOpen.open(AudioSystem.getAudioInputStream(new File(path + "sounds/Exit_Opens.wav")));
+
+            clipitemGet = AudioSystem.getClip();
+            clipitemGet.open(AudioSystem.getAudioInputStream(new File(path + "sounds/Item_Get.wav")));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Clip soundGame;
+        try {
+            soundGame = AudioSystem.getClip();
+            soundGame.open(AudioSystem.getAudioInputStream(new File(path + "sounds/soundGame.wav")));
+            soundGame.start();
+            soundGame.loop(soundGame.LOOP_CONTINUOUSLY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Application.launch(BombermanGame.class);
     }
 
@@ -56,12 +90,29 @@ public class BombermanGame extends Application {
         Oneal.load();
     }
 
-    public static void playSound(String fileName) {
-        fileName = path + "sounds/" + fileName;
+    public static void playSound(Clip clip) {
+        if (clip.isRunning())
+            clip.stop();
+        clip.setFramePosition(0);
+        clip.start();
+    }
+
+    public void makeMap(String fileName) {
         try {
-            Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(new File(fileName)));
-            clip.start();
+            createMap(fileName);
+            if (fileName.compareTo("Level1.txt") == 0) {
+                Bomber.resetbombLimit();
+                Bomber.resetSpeed();
+                Bomb.resetLen();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sleep(int milis) {
+        try {
+            Thread.sleep(milis);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -112,27 +163,46 @@ public class BombermanGame extends Application {
         stage.setScene(scene);
         stage.show();
 
+
+        makeMap(map[0]);
+
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
+                if (!player.notReallyDie()) {
+                    curMap = 0;
+                    sleep(1500);
+                    makeMap(map[0]);
+                } else {
+                    if (winGame) {
+                        curMap = (curMap + 1) % 3;
+                        makeMap(map[curMap]);
+                        winGame = false;
+                    }
+                }
                 update(l);
                 render();
-                try {
-                    Thread.sleep(10);
-                } catch (Exception e) {}
-
+                sleep(10);
             }
         };
         timer.start();
+    }
 
-        try {
-            createMap("Level1.txt");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void clearAll() {
+        bricks.clear();
+        enemies.clear();
+        items.clear();
+        stillObjects.clear();
+        flames.clear();
+        bombs.clear();
+        bomberDirection = -1;
+        dropBomb = false;
+        predropBomb = false;
+        curIdBomb = -1;
     }
 
     public void createMap(String fileName) throws IOException {
+        clearAll();
         Scanner objReader = new Scanner(new File(path + "levels/" +fileName));
         int stage = objReader.nextInt();
         int m = objReader.nextInt();
@@ -215,7 +285,7 @@ public class BombermanGame extends Application {
         for (int i = bombs.size() - 1; i >= 0; --i) {
             Bomb b = bombs.get(i);
             if (b.isDeath()) {
-                playSound("Bomb_Explodes.wav");
+                playSound(clipBombExploydes);
                 bombs.remove(i);
             }
         }
@@ -252,7 +322,7 @@ public class BombermanGame extends Application {
             e.update(l);
             if (e.isDeath() && e.getCurState() == 4) {
                 enemies.remove(i);
-                playSound("Enemy_Dead.wav");
+                playSound(clipEnemyDead);
             }
         }
 
@@ -260,8 +330,6 @@ public class BombermanGame extends Application {
         player.update(l);
         if (player.isReborn()) {
             player.letsreborn();
-
-
             player.setReborn(false);
         }
     }
@@ -272,9 +340,7 @@ public class BombermanGame extends Application {
                 continue;
             }
             if (i.isDeath()) {
-                background.setX(i.getX());
-                background.setY(i.getY());
-                background.render(gc);
+                setBackground(i);
             } else {
                 i.render(gc);
             }
@@ -283,6 +349,7 @@ public class BombermanGame extends Application {
         for (Bomb b : bombs) {
             b.render(gc);
         }
+
         for (Flame f : flames) {
             f.render(gc);
         }

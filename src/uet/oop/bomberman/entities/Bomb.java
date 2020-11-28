@@ -14,6 +14,10 @@ public class Bomb extends Entity {
     public static ArrayList<ArrayList<Image>> constImage = new ArrayList<>();
     public boolean killedByOtherBomb;
 
+    public static void resetLen() {
+        len = 1;
+    }
+
     public static void load() {
         constImage.add(new ArrayList<Image>());
         constImage.get(0).add(Sprite.bomb.getFxImage());
