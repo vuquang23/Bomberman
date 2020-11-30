@@ -276,8 +276,10 @@ public class Bomber extends Entity {
             }
         }
         for (Enemy e : BombermanGame.enemies) {
-            if (rect.intersects(e.getX(), e.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
-                return true;
+            if (!e.isDeath()) {
+                if (rect.intersects(e.getX(), e.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                    return true;
+                }
             }
         }
         return false;
