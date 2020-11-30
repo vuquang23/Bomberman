@@ -88,6 +88,8 @@ public class BombermanGame extends Application {
         Bomber.load();
         Flame.load();
         Oneal.load();
+        Kondoria.load();
+        Minvo.load();
     }
 
     public static void playSound(Clip clip) {
@@ -228,6 +230,12 @@ public class BombermanGame extends Application {
                             break;
                         case ('2'):
                             enemies.add(new Oneal(j, i, Sprite.oneal_left1.getFxImage()));
+                            break;
+                        case ('3'):
+                            enemies.add(new Minvo(j, i, Sprite.minvo_left1.getFxImage()));
+                            break;
+                        case ('4'):
+                            enemies.add(new Kondoria(j, i, Sprite.kondoria_left1.getFxImage()));
                             break;
                         case ('*'):
                             bricks.add(new Brick(j, i, Sprite.brick.getFxImage()));
