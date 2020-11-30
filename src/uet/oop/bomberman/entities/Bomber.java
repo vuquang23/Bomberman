@@ -230,7 +230,7 @@ public class Bomber extends Entity {
             return;
         }
         this.setUpSpeed(false);
-        speed += 4;
+        speed = Math.min(speed * 2, 32);
     }
 
     public void upLimitBomb() {
