@@ -36,6 +36,7 @@ public class Minvo extends Enemy {
 
     public Minvo(int x, int y, Image img) {
         super( x, y, img);
+        this.speed = 2;
     }
     static Random ran = new Random();
 
@@ -61,34 +62,55 @@ public class Minvo extends Enemy {
                 return;
             }
         }
-        Collections.shuffle(randomDir);
-        if (this.x % 32 == 0 && this.y % 32 == 0) {
-            this.dir = ran.nextInt() % 4;
-            if (this.dir < 0) {
-                this.dir += 4;
-            }
-        }
-        int newX = this.x + xx[this.dir] * this.speed;
-        int newY = this.y + yy[this.dir] * this.speed;
-        if (!canMove(newX, newY)) {
-            for (int id = 0; id < 4; ++id) {
-                int i = randomDir.get(id).intValue();
-                newX = this.x + xx[i] * this.speed;
-                newY = this.y + yy[i] * this.speed;
-                if (canMove(newX, newY)) {
-                    this.dir = i;
+        boolean findBomber = false;
+        int newX = this.x;
+        int newY = this.y;
+        for (int i = 0; i < 4; ++i) {
+            int curX = this.x;
+            int curY = this.y;
+            while (canMove(curX, curY)) {
+                javafx.geometry.Rectangle2D curRect = new Rectangle2D(curX, curY, Sprite.SCALED_SIZE, Sprite.SCALED_SIZE);
+                if (curRect.intersects(BombermanGame.player.getX(), BombermanGame.player.getY(), Sprite.SCALED_SIZE, Sprite.SCALED_SIZE)) {
+                    newX = this.x + this.speed * xx[i];
+                    newY = this.y + this.speed * yy[i];
+                    findBomber = true;
                     break;
                 }
+                curX += this.speed * xx[i];
+                curY += this.speed * yy[i];
             }
-            if (!canMove(newX, newY)) {
-                newX = this.x;
-                newY = this.y;
+            if (findBomber) {
+                break;
             }
         }
-
+        if (!findBomber) {
+            Collections.shuffle(randomDir);
+            if (this.x % 32 == 0 && this.y % 32 == 0) {
+                this.dir = ran.nextInt() % 4;
+                if (this.dir < 0) {
+                    this.dir += 4;
+                }
+            }
+            newX = this.x + xx[this.dir] * this.speed;
+            newY = this.y + yy[this.dir] * this.speed;
+            if (!canMove(newX, newY)) {
+                for (int id = 0; id < 4; ++id) {
+                    int i = randomDir.get(id).intValue();
+                    newX = this.x + xx[i] * this.speed;
+                    newY = this.y + yy[i] * this.speed;
+                    if (canMove(newX, newY)) {
+                        this.dir = i;
+                        break;
+                    }
+                }
+                if (!canMove(newX, newY)) {
+                    newX = this.x;
+                    newY = this.y;
+                }
+            }
+        }
         this.setX(newX);
         this.setY(newY);
-
         curState += 1;
         curState %= 9;
         if (this.dir == 1) {
