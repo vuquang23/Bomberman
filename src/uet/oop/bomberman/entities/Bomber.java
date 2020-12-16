@@ -206,7 +206,6 @@ public class Bomber extends Entity {
     }
 
     void dropBomb(long l) {
-        System.out.println(BombermanGame.bombs.size());
         if (BombermanGame.bombs.size() == bombLimit) return;
         int xb = (x / 32);
         int yb = (y / 32);
