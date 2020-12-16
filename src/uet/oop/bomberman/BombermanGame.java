@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BombermanGame extends Application {
-
+    
     public static final int WIDTH = 31;
     public static final int HEIGHT = 13;
 
@@ -164,8 +164,6 @@ public class BombermanGame extends Application {
         // Them scene vao stage
         stage.setScene(scene);
         stage.show();
-
-
         makeMap(map[0]);
 
         AnimationTimer timer = new AnimationTimer() {
